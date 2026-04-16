@@ -1720,13 +1720,29 @@ function loadDishes() {
   try {
     const stored = localStorage.getItem('aura_dishes');
     return stored ? JSON.parse(stored) : JSON.parse(JSON.stringify(DISHES_DEFAULT));
-  } catch { return JSON.parse(JSON.stringify(DISHES_DEFAULT)); }
+  } catch (e) {
+    console.error('Error loading dishes:', e);
+    return JSON.parse(JSON.stringify(DISHES_DEFAULT));
+  }
 }
 function saveDishes() {
   localStorage.setItem('aura_dishes', JSON.stringify(DISHES));
 }
 
 let DISHES = loadDishes();
+
+// Verify DISHES is properly loaded
+if (!DISHES || typeof DISHES !== 'object' || Array.isArray(DISHES)) {
+  console.error('DISHES not properly loaded, resetting...', DISHES);
+  DISHES = JSON.parse(JSON.stringify(DISHES_DEFAULT));
+}
+
+// If DISHES is empty and there are default dishes, initialize with defaults
+if (Object.keys(DISHES).length === 0 && Object.keys(DISHES_DEFAULT).length > 0) {
+  console.log('Initializing menu with default dishes...');
+  DISHES = JSON.parse(JSON.stringify(DISHES_DEFAULT));
+  saveDishes();
+}
 
 // ══════════════════════════════════════════════
 //  CART STATE
@@ -1797,13 +1813,22 @@ function doSearch(q) {
 //  MODAL
 // ══════════════════════════════════════════════
 function openModal(id) {
-  const d = DISHES[id];
-  if (!d) return;
+  // Refresh DISHES from localStorage to get latest items
+  DISHES = loadDishes();
+  
+  // Try to find the dish in loaded DISHES, fall back to DISHES_DEFAULT for hardcoded menu items
+  let d = DISHES[id] || DISHES_DEFAULT[id];
+  
+  if (!d) {
+    console.warn('Dish not found:', id, 'Available dishes:', Object.keys(DISHES));
+    showToast('❌ Item not found. Please refresh the page.');
+    return;
+  }
   currentDish = id;
   qty = 1;
   document.getElementById('qtyVal').textContent = '1';
   document.getElementById('specialInput').value = '';
-  document.getElementById('modalTitle').innerHTML = `${d.title} <em>${d.titleEm}</em>`;
+  document.getElementById('modalTitle').innerHTML = `${d.title} <em>${d.titleEm || ''}</em>`;
   document.getElementById('modalSub').textContent = d.sub || 'Signature dish';
 
   const mv = document.getElementById('mv');
@@ -1902,7 +1927,9 @@ function changeQty(delta) {
 
 function addToCart() {
   if (!currentDish) return;
-  const d = DISHES[currentDish];
+  // Use fallback to DISHES_DEFAULT for hardcoded menu items
+  const d = DISHES[currentDish] || DISHES_DEFAULT[currentDish];
+  if (!d) return;
   const note = document.getElementById('specialInput').value.trim();
   const existing = cart.find(i => i.id === currentDish && i.note === note);
   if (existing) {
@@ -2037,6 +2064,19 @@ function placeOrder() {
   orders.push(order);
   localStorage.setItem('aura_orders', JSON.stringify(orders));
 
+  // REDUCE INVENTORY when order is placed
+  try {
+    let inventory = JSON.parse(localStorage.getItem('aura_inventory')) || {};
+    cart.forEach(item => {
+      if (inventory[item.id]) {
+        inventory[item.id] = Math.max(0, inventory[item.id] - item.qty);
+      }
+    });
+    localStorage.setItem('aura_inventory', JSON.stringify(inventory));
+  } catch (e) {
+    console.error('Error updating inventory:', e);
+  }
+
   // Build confirm message
   const items = cart.map(i => `${i.qty}× ${i.name}`).join(', ');
   document.getElementById('confirmSub').innerHTML =
@@ -2096,6 +2136,26 @@ function showToast(msg) {
 // ══════════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════════
+function refreshMenuFromStorage() {
+  try {
+    const newDishes = loadDishes();
+    // Update the global DISHES so openModal can find items
+    DISHES = newDishes;
+    
+    Object.entries(newDishes).forEach(([id, d]) => {
+      // Check if dish card already exists
+      if (!document.getElementById('dcard-' + id)) {
+        // Only add if it has a valid category with a grid
+        if (document.getElementById('grid-' + d.category)) {
+          addCardToGrid(id, d);
+        }
+      }
+    });
+  } catch (e) {
+    console.error('Error refreshing menu:', e);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize theme
   initTheme();
@@ -2118,6 +2178,9 @@ document.addEventListener('DOMContentLoaded', () => {
       addCardToGrid(id, d);
     }
   });
+
+  // Auto-refresh menu every 2 seconds to pick up items added from admin panel
+  setInterval(refreshMenuFromStorage, 2000);
 });
 
 // close modals on bg click

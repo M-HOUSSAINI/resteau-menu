@@ -3,139 +3,153 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AURA — Advanced Admin Dashboard</title>
+  <title>AURA — Modern Admin Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,600;0,700&display=swap" rel="stylesheet">
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --bg:        #ffffff;
-      --surface:   #f8f9fa;
+      --surface:   #f5f7fb;
       --card:      #ffffff;
-      --border:    #e8e8e8;
-      --primary:   #ffc107;
-      --primary-dark: #ffb300;
-      --accent:    #ff6b35;
-      --text:      #1a1a1a;
-      --text-light: #6b7280;
-      --text-muted: #9ca3af;
+      --border:    #e5e7eb;
+      --primary:   #3b82f6;
+      --secondary: #8b5cf6;
+      --accent:    #ec4899;
+      --text:      #0f172a;
+      --text-light: #64748b;
+      --text-muted: #cbd5e1;
       --danger:    #ef4444;
       --success:   #10b981;
       --warning:   #f59e0b;
       --info:      #3b82f6;
-      --radius:    16px;
-      --font-serif: 'Cormorant Garamond', Georgia, serif;
-      --font-sans:  'DM Sans', sans-serif;
+      --radius:    12px;
+      --font-display: 'Cormorant Garamond', serif;
+      --font-body:  'Inter', sans-serif;
+      --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
       --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
-      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+      --shadow-lg: 0 10px 24px rgba(0, 0, 0, 0.14);
     }
 
     :root[data-theme="dark"] {
-      --bg:        #0f1419;
-      --surface:   #1a1f2e;
-      --card:      #242d3d;
-      --border:    #3a4557;
-      --primary:   #ffc107;
-      --accent:    #ff6b35;
-      --text:      #f5f6fa;
-      --text-light: #a0abb8;
-      --text-muted: #7a8696;
-      --danger:    #ff5555;
-      --success:   #4ade80;
-      --warning:   #fbbf24;
-      --info:      #60a5fa;
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
-      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+      --bg:        #0f172a;
+      --surface:   #1e293b;
+      --card:      #1a2332;
+      --border:    #334155;
+      --text:      #f1f5f9;
+      --text-light: #cbd5e1;
+      --text-muted: #64748b;
+      --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+      --shadow-lg: 0 10px 24px rgba(0, 0, 0, 0.6);
     }
 
     html, body {
       min-height: 100dvh;
       background: var(--bg);
       color: var(--text);
-      font-family: var(--font-sans);
+      font-family: var(--font-body);
       font-size: 14px;
+      line-height: 1.5;
       -webkit-font-smoothing: antialiased;
       overflow: hidden;
       transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .admin-container { display: flex; height: 100dvh; }
+
+    /* ═════════════════════════════════════════════════════
+       SIDEBAR
+       ═════════════════════════════════════════════════════ */
     .admin-sidebar {
-      width: 280px;
+      width: 260px;
       background: var(--card);
       border-right: 1px solid var(--border);
       display: flex;
       flex-direction: column;
       overflow-y: auto;
       box-shadow: var(--shadow-sm);
+      transition: background-color 0.3s ease;
     }
 
     .admin-header {
-      padding: 24px 20px;
+      padding: 28px 20px;
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
     }
 
     .admin-logo {
-      font-family: var(--font-serif);
-      font-size: 28px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      color: var(--accent);
-      margin-bottom: 8px;
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
     }
 
-    .admin-logo span { color: var(--primary); }
     .admin-subtitle {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.08em;
       font-weight: 600;
     }
 
     .nav-tabs {
+      flex: 1;
+      padding: 12px;
       display: flex;
       flex-direction: column;
       gap: 4px;
-      padding: 12px;
-      flex: 1;
-      overflow-y: auto;
     }
 
     .nav-tab {
       padding: 12px 14px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 500;
+      border: none;
+      border-radius: var(--radius);
+      background: transparent;
       color: var(--text-light);
+      font-size: 13px;
+      font-family: var(--font-body);
+      font-weight: 500;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
       text-align: left;
-      -webkit-tap-highlight-color: transparent;
     }
 
     .nav-tab:hover {
-      border-color: var(--primary);
+      background: var(--surface);
       color: var(--text);
-      background: #fff8e1;
     }
 
     .nav-tab.active {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #000;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+      color: var(--primary);
+      border-left-color: var(--primary);
       font-weight: 600;
-      box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
     }
 
+    .sidebar-footer {
+      padding: 12px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    /* ═════════════════════════════════════════════════════
+       MAIN CONTENT
+       ═════════════════════════════════════════════════════ */
     .main-content {
       flex: 1;
       display: flex;
@@ -144,133 +158,331 @@
       overflow: hidden;
     }
 
-    .tab-content {
-      display: none;
-      flex: 1;
-      overflow-y: auto;
-      padding: 24px;
-    }
-
-    .tab-content.active { display: flex; flex-direction: column; }
-
     .top-bar {
+      padding: 20px 32px;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 24px;
-      background: var(--card);
-      border-bottom: 1px solid var(--border);
       flex-shrink: 0;
+      box-shadow: var(--shadow-xs);
     }
 
     .top-title {
-      font-family: var(--font-serif);
-      font-size: 20px;
-      font-weight: 600;
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 700;
       color: var(--text);
     }
 
-    .top-actions {
-      display: flex;
-      gap: 12px;
-      align-items: center;
+    .tabs-container {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: var(--bg);
     }
 
-    .btn {
-      padding: 10px 16px;
-      border: none;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: var(--font-sans);
+    .tab-content {
+      display: none;
+      padding: 32px;
+      padding-right: 48px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ═════════════════════════════════════════════════════
+       CARDS & LAYOUT
+       ═════════════════════════════════════════════════════ */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-xs);
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-sm);
+      border-color: var(--primary);
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, var(--card) 0%, rgba(59, 130, 246, 0.02) 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: all 0.2s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      font-weight: 600;
+      margin-bottom: 8px;
     }
 
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: #000;
-      box-shadow: var(--shadow-md);
+    .stat-value {
+      font-family: var(--font-body);
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -0.02em;
     }
 
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-    .btn-danger { background: var(--danger); color: #fff; }
-    .btn-danger:hover { opacity: 0.9; }
-    .btn-success { background: var(--success); color: #fff; }
-    .btn-success:hover { opacity: 0.9; }
-    .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
-    .btn-secondary:hover { border-color: var(--primary); }
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
 
-    .icon-btn {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      display: grid;
-      place-items: center;
-      cursor: pointer;
-      transition: all 0.2s;
+    .page-title {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 700;
       color: var(--text);
     }
 
-    .icon-btn:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-      background: #fff8e1;
-    }
-
+    /* ═════════════════════════════════════════════════════
+       FORMS
+       ═════════════════════════════════════════════════════ */
     .form-group {
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
 
     .form-label {
       display: block;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
-      color: var(--text-light);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 6px;
-    }
-
-    .form-input, .form-textarea, .form-select {
-      width: 100%;
-      padding: 10px 12px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-family: var(--font-sans);
-      font-size: 14px;
       color: var(--text);
+      margin-bottom: 8px;
+      text-transform: capitalize;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 13px;
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
       outline: none;
-      transition: all 0.2s;
-    }
-
-    .form-input:focus, .form-textarea:focus, .form-select:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.1);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
 
-    .form-textarea { resize: vertical; min-height: 80px; }
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
 
-    .grid-2 {
+    .form-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 16px;
     }
 
+    /* ═════════════════════════════════════════════════════
+       BUTTONS
+       ═════════════════════════════════════════════════════ */
+    .btn {
+      padding: 10px 18px;
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: capitalize;
+      white-space: nowrap;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--card);
+      border-color: var(--primary);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, var(--danger) 0%, #f87171 100%);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      opacity: 0.9;
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, var(--success) 0%, #34d399 100%);
+      color: white;
+    }
+
+    .btn-success:hover {
+      opacity: 0.9;
+    }
+
+    .btn-small {
+      padding: 8px 12px;
+      font-size: 12px;
+    }
+
+    /* ═════════════════════════════════════════════════════
+       ITEMS LIST
+       ═════════════════════════════════════════════════════ */
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .item-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .item-card:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 12px;
+    }
+
+    .item-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .item-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .badge-primary {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--primary);
+    }
+
+    .badge-success {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+    }
+
+    .badge-danger {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--danger);
+    }
+
+    .item-content {
+      flex: 1;
+      margin-bottom: 12px;
+    }
+
+    .item-content p {
+      font-size: 12px;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    .item-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* ═════════════════════════════════════════════════════
+       MODAL
+       ═════════════════════════════════════════════════════ */
     .modal {
       display: none;
       position: fixed;
-      inset: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       background: rgba(0, 0, 0, 0.5);
       z-index: 1000;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      animation: fadeIn 0.2s ease;
     }
 
     .modal.open {
@@ -279,503 +491,429 @@
 
     .modal-content {
       background: var(--card);
-      border-radius: 16px;
-      padding: 24px;
+      border-radius: var(--radius);
+      width: 90%;
       max-width: 500px;
-      width: 100%;
       max-height: 90vh;
       overflow-y: auto;
       box-shadow: var(--shadow-lg);
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
     .modal-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      flex-shrink: 0;
     }
 
     .modal-title {
-      font-family: var(--font-serif);
+      font-family: var(--font-display);
       font-size: 20px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text);
     }
 
     .modal-close {
-      background: none;
+      width: 32px;
+      height: 32px;
       border: none;
-      font-size: 24px;
-      cursor: pointer;
-      color: var(--text);
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 12px;
-    }
-
-    .card-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-
-    .stat-box {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px;
-      text-align: center;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
     }
 
-    .stat-value {
-      font-family: var(--font-serif);
-      font-size: 32px;
-      font-weight: 700;
-      color: var(--primary);
+    .modal-close:hover {
+      background: var(--border);
     }
 
-    .stat-label {
+    .modal-body {
+      padding: 24px;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      flex-shrink: 0;
+    }
+
+    /* ═════════════════════════════════════════════════════
+       TABLE
+       ═════════════════════════════════════════════════════ */
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-xs);
+    }
+
+    .table thead {
+      background: linear-gradient(135deg, var(--surface) 0%, rgba(59, 130, 246, 0.05) 100%);
+    }
+
+    .table th {
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
       font-size: 12px;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      margin-top: 8px;
-      font-weight: 600;
+      border-bottom: 1px solid var(--border);
     }
 
-    .toast {
+    .table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .table tr:hover {
+      background: var(--surface);
+    }
+
+    /* ═════════════════════════════════════════════════════
+       TOAST NOTIFICATIONS
+       ═════════════════════════════════════════════════════ */
+    #toastContainer {
       position: fixed;
       bottom: 24px;
       right: 24px;
-      background: var(--primary);
-      color: #000;
-      padding: 14px 24px;
-      border-radius: 50px;
-      font-weight: 600;
-      z-index: 999;
-      box-shadow: var(--shadow-lg);
-      animation: slideIn 0.3s ease;
-      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 2000;
+      pointer-events: none;
     }
 
-    @keyframes slideIn {
+    .toast {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-lg);
+      animation: slideInRight 0.3s ease;
+      pointer-events: auto;
+    }
+
+    @keyframes slideInRight {
       from { transform: translateX(400px); opacity: 0; }
       to { transform: translateX(0); opacity: 1; }
     }
 
-    .login-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100dvh;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+    /* ═════════════════════════════════════════════════════
+       SCROLLBAR
+       ═════════════════════════════════════════════════════ */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
     }
 
-    .login-card {
-      background: var(--card);
-      border-radius: 20px;
-      padding: 40px;
-      box-shadow: var(--shadow-lg);
-      width: 100%;
-      max-width: 360px;
+    ::-webkit-scrollbar-track {
+      background: transparent;
     }
 
-    .login-title {
-      font-family: var(--font-serif);
-      font-size: 28px;
-      font-weight: 600;
-      text-align: center;
-      margin-bottom: 8px;
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
     }
 
-    .login-sub {
-      text-align: center;
-      color: var(--text-muted);
-      margin-bottom: 32px;
-      font-size: 13px;
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-muted);
     }
 
-    .login-btn {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: #000;
-      border: none;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      transition: all 0.2s;
-      margin-top: 16px;
-      box-shadow: var(--shadow-md);
+    /* ═════════════════════════════════════════════════════
+       RESPONSIVE
+       ═════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .admin-sidebar {
+        width: 200px;
+      }
+
+      .stat-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .items-grid {
+        grid-template-columns: 1fr;
+      }
     }
-
-    .login-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .order-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px;
-      margin-bottom: 8px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .order-item:hover { border-color: var(--primary); }
-    .order-item.active { border-color: var(--primary); background: #fff8e1; }
-
-    .table { width: 100%; border-collapse: collapse; }
-    .table thead { background: var(--surface); border-bottom: 2px solid var(--border); }
-    .table th { padding: 12px; text-align: left; font-weight: 600; font-size: 12px; text-transform: uppercase; color: var(--text-muted); }
-    .table td { padding: 12px; border-bottom: 1px solid var(--border); }
-    .table tr:hover { background: var(--surface); }
-
-    .chart-container { height: 300px; background: var(--surface); border-radius: 12px; border: 1px solid var(--border); padding: 16px; margin-bottom: 16px; }
-
-    .food-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px;
-      margin-bottom: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .food-item-info { flex: 1; }
-    .food-item-name { font-weight: 600; color: var(--text); }
-    .food-item-meta { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
-    .food-item-price { font-weight: 700; color: var(--primary); }
-
-    .badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 50px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    .badge-success { background: rgba(16, 185, 129, 0.1); color: var(--success); }
-    .badge-danger { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
-    .badge-warning { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
-    .badge-info { background: rgba(59, 130, 246, 0.1); color: var(--info); }
-
-    .text-right { text-align: right; }
-    .text-center { text-align: center; }
-    .mt-2 { margin-top: 16px; }
-    .mb-2 { margin-bottom: 16px; }
-    .gap-2 { gap: 16px; }
   </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
-<div id="loginScreen" class="login-container">
-  <div class="login-card">
-    <div class="login-title">AU<span style="color:var(--primary)">R</span>A</div>
-    <div class="login-sub">Advanced Admin Dashboard</div>
-    <div class="form-group">
-      <div class="form-label">Username</div>
-      <input class="form-input" id="loginUser" type="text" placeholder="admin">
-    </div>
-    <div class="form-group">
-      <div class="form-label">Password</div>
-      <input class="form-input" id="loginPass" type="password" placeholder="••••••••">
-    </div>
-    <button class="login-btn" onclick="adminLogin()">Login</button>
-  </div>
-</div>
-
-<!-- MAIN ADMIN PANEL -->
-<div id="adminPanel" class="admin-container" style="display:none;">
+<div class="admin-container">
   <!-- SIDEBAR -->
   <div class="admin-sidebar">
     <div class="admin-header">
-      <div class="admin-logo">AU<span>R</span>A</div>
-      <div class="admin-subtitle">Admin Dashboard</div>
+      <div class="admin-logo">AURA</div>
+      <div class="admin-subtitle">Dashboard</div>
     </div>
+
     <div class="nav-tabs">
-      <button class="nav-tab active" onclick="switchTab('orders')">📋 Orders</button>
-      <button class="nav-tab" onclick="switchTab('food')">🍽 Food Management</button>
+      <button class="nav-tab active" onclick="switchTab('food')">🍽 Food Management</button>
       <button class="nav-tab" onclick="switchTab('restaurant')">🏪 Restaurant</button>
       <button class="nav-tab" onclick="switchTab('categories')">📂 Categories</button>
       <button class="nav-tab" onclick="switchTab('inventory')">📦 Inventory</button>
-      <button class="nav-tab" onclick="switchTab('offers')">🎁 Special Offers</button>
+      <button class="nav-tab" onclick="switchTab('offers')">🎁 Offers</button>
       <button class="nav-tab" onclick="switchTab('feedback')">⭐ Feedback</button>
       <button class="nav-tab" onclick="switchTab('analytics')">📊 Analytics</button>
       <button class="nav-tab" onclick="switchTab('settings')">⚙️ Settings</button>
     </div>
-    <div style="padding: 12px; border-top: 1px solid var(--border);">
-      <button class="btn btn-secondary" style="width:100%;margin-bottom:8px;" onclick="toggleTheme()">🌙 Theme</button>
-      <button class="btn btn-danger" style="width:100%;" onclick="adminLogout()">🚪 Logout</button>
+
+    <div class="sidebar-footer">
+      <button class="btn btn-secondary" onclick="toggleTheme()">🌙 Theme</button>
+      <button class="btn btn-danger" onclick="adminLogout()">🚪 Logout</button>
     </div>
   </div>
 
   <!-- MAIN CONTENT -->
   <div class="main-content">
     <div class="top-bar">
-      <div class="top-title" id="topTitle">Orders</div>
-      <div class="top-actions">
-        <button class="icon-btn" onclick="refreshData()" title="Refresh">🔄</button>
+      <div class="top-title" id="topTitle">Food Management</div>
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <span id="timeDisplay" style="font-size: 12px; color: var(--text-muted);"></span>
       </div>
     </div>
 
-    <!-- ORDERS TAB -->
-    <div id="tab-orders" class="tab-content active" style="display:flex;">
-      <div style="flex:1;overflow-y:auto;padding:24px;">
-        <div class="grid-2" style="margin-bottom:24px;">
-          <div class="stat-box">
-            <div class="stat-value" id="statPending">0</div>
-            <div class="stat-label">Pending Orders</div>
+    <div class="tabs-container">
+      <!-- FOOD MANAGEMENT TAB -->
+      <div id="tab-food" class="tab-content active">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Food Menu</div>
+            <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">Manage your restaurant menu items</p>
           </div>
-          <div class="stat-box">
-            <div class="stat-value" id="statPreparing">0</div>
-            <div class="stat-label">Preparing</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-value" id="statCompleted">0</div>
-            <div class="stat-label">Completed Today</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-value" id="statRevenue">$0</div>
-            <div class="stat-label">Total Revenue</div>
-          </div>
+          <button class="btn btn-primary" onclick="openAddFoodModal()">+ Add Food Item</button>
         </div>
 
-        <h3 style="margin:20px 0 12px;">Filter by Status</h3>
-        <button class="nav-tab active" onclick="filterOrders('all')" style="width:100%;margin-bottom:8px;">All Orders</button>
-        <button class="nav-tab" onclick="filterOrders('pending')" style="width:100%;margin-bottom:8px;">🔴 New Orders</button>
-        <button class="nav-tab" onclick="filterOrders('accepted')" style="width:100%;margin-bottom:8px;">✅ Accepted</button>
-        <button class="nav-tab" onclick="filterOrders('preparing')" style="width:100%;margin-bottom:8px;">👨‍🍳 Preparing</button>
-        <button class="nav-tab" onclick="filterOrders('completed')" style="width:100%;margin-bottom:8px;">📦 Completed</button>
-
-        <h3 style="margin:20px 0 12px;">Recent Orders</h3>
-        <div id="ordersList"></div>
+        <div class="items-grid" id="foodList"></div>
       </div>
 
-      <div style="flex:0 0 400px;background:var(--surface);border-left:1px solid var(--border);overflow-y:auto;padding:24px;">
-        <div id="orderDetail">
-          <div style="text-align:center;color:var(--text-muted);padding:40px 20px;">
-            <div style="font-size:48px;margin-bottom:12px;">📦</div>
-            <p>No order selected</p>
-            <p style="font-size:12px;margin-top:8px;">Click an order to view details</p>
+      <!-- RESTAURANT SETTINGS TAB -->
+      <div id="tab-restaurant" class="tab-content">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Restaurant Settings</div>
+            <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">Customize your restaurant details</p>
           </div>
         </div>
+
+        <div class="card" style="max-width: 600px;">
+          <div class="form-group">
+            <label class="form-label">Restaurant Name</label>
+            <input class="form-input" id="restName" placeholder="Enter restaurant name" onchange="saveRestaurantSettings()">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Logo URL</label>
+            <input class="form-input" id="restLogo" placeholder="Enter logo image URL" onchange="saveRestaurantSettings()">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Address</label>
+            <input class="form-input" id="restAddress" placeholder="Enter address" onchange="saveRestaurantSettings()">
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Contact Phone</label>
+              <input class="form-input" id="restPhone" type="tel" placeholder="Enter phone number" onchange="saveRestaurantSettings()">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Opening Hours</label>
+              <input class="form-input" id="restHours" placeholder="e.g., 10AM - 11PM" onchange="saveRestaurantSettings()">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea class="form-textarea" id="restDesc" placeholder="Enter restaurant description" onchange="saveRestaurantSettings()"></textarea>
+          </div>
+
+          <button class="btn btn-success" onclick="saveRestaurantSettings()" style="width: 100%;">💾 Save Settings</button>
+        </div>
       </div>
-    </div>
 
-    <!-- FOOD MANAGEMENT TAB -->
-    <div id="tab-food" class="tab-content">
-      <div style="padding:24px;overflow-y:auto;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
-          <h2>Food Management</h2>
-          <button class="btn btn-primary" onclick="openAddFoodModal()">+ Add Food</button>
-        </div>
-
-        <div id="foodList"></div>
-      </div>
-    </div>
-
-    <!-- RESTAURANT SETTINGS TAB -->
-    <div id="tab-restaurant" class="tab-content">
-      <div style="padding:24px;overflow-y:auto;max-width:600px;">
-        <h2 style="margin-bottom:24px;">Restaurant Settings</h2>
-
-        <div class="form-group">
-          <label class="form-label">Restaurant Name</label>
-          <input class="form-input" id="restName" placeholder="Enter restaurant name" onchange="saveRestaurantSettings()">
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Logo URL</label>
-          <input class="form-input" id="restLogo" placeholder="Enter logo image URL" onchange="saveRestaurantSettings()">
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Address</label>
-          <input class="form-input" id="restAddress" placeholder="Enter address" onchange="saveRestaurantSettings()">
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Contact Phone</label>
-          <input class="form-input" id="restPhone" type="tel" placeholder="Enter phone number" onchange="saveRestaurantSettings()">
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Opening Hours</label>
-          <input class="form-input" id="restHours" placeholder="e.g., 10:00 AM - 11:00 PM" onchange="saveRestaurantSettings()">
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Description</label>
-          <textarea class="form-textarea" id="restDesc" placeholder="Enter restaurant description" onchange="saveRestaurantSettings()"></textarea>
-        </div>
-
-        <button class="btn btn-success" onclick="saveRestaurantSettings()">Save Settings</button>
-      </div>
-    </div>
-
-    <!-- CATEGORIES TAB -->
-    <div id="tab-categories" class="tab-content">
-      <div style="padding:24px;overflow-y:auto;max-width:600px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
-          <h2>Manage Categories</h2>
+      <!-- CATEGORIES TAB -->
+      <div id="tab-categories" class="tab-content">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Menu Categories</div>
+            <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">Organize your menu into categories</p>
+          </div>
           <button class="btn btn-primary" onclick="openAddCategoryModal()">+ Add Category</button>
         </div>
 
-        <div id="categoriesList"></div>
+        <div class="items-grid" id="categoriesList"></div>
       </div>
-    </div>
 
-    <!-- INVENTORY TAB -->
-    <div id="tab-inventory" class="tab-content">
-      <div style="padding:24px;overflow-y:auto;">
-        <h2 style="margin-bottom:24px;">Inventory Management</h2>
-
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Food Item</th>
-              <th>Stock</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="inventoryList"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- SPECIAL OFFERS TAB -->
-    <div id="tab-offers" class="tab-content">
-      <div style="padding:24px;overflow-y:auto;max-width:700px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
-          <h2>Special Offers & Discounts</h2>
-          <button class="btn btn-primary" onclick="openAddOfferModal()">+ Add Offer</button>
+      <!-- INVENTORY TAB -->
+      <div id="tab-inventory" class="tab-content">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Inventory Management</div>
+            <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">Track stock levels for menu items</p>
+          </div>
         </div>
 
-        <div id="offersList"></div>
+        <div class="table-wrapper" style="overflow-x: auto;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Food Item</th>
+                <th>Stock Level</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryList"></tbody>
+          </table>
+        </div>
       </div>
-    </div>
 
-    <!-- FEEDBACK TAB -->
-    <div id="tab-feedback" class="tab-content">
-      <div style="padding:24px;overflow-y:auto;">
-        <h2 style="margin-bottom:24px;">Customer Feedback</h2>
+      <!-- SPECIAL OFFERS TAB -->
+      <div id="tab-offers" class="tab-content">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Special Offers</div>
+            <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">Create discounts and promotions</p>
+          </div>
+          <button class="btn btn-primary" onclick="openAddOfferModal()">+ Create Offer</button>
+        </div>
 
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:24px;">
-          <div class="stat-box">
-            <div class="stat-value" id="avgRating">4.8</div>
+        <div class="items-grid" id="offersList"></div>
+      </div>
+
+      <!-- CUSTOMER FEEDBACK TAB -->
+      <div id="tab-feedback" class="tab-content">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Customer Feedback</div>
+            <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">View customer reviews and ratings</p>
+          </div>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-card">
             <div class="stat-label">Average Rating</div>
+            <div class="stat-value" id="avgRating">4.8</div>
           </div>
-          <div class="stat-box">
+          <div class="stat-card">
+            <div class="stat-label">Total Reviews</div>
             <div class="stat-value" id="totalFeedback">42</div>
-            <div class="stat-label">Total Feedbacks</div>
           </div>
-          <div class="stat-box">
-            <div class="stat-value" id="satisfyRate">94%</div>
+          <div class="stat-card">
             <div class="stat-label">Satisfaction Rate</div>
+            <div class="stat-value" id="satisfyRate">94%</div>
           </div>
         </div>
 
-        <h3 style="margin:20px 0 12px;">Recent Feedback</h3>
-        <div id="feedbackList"></div>
+        <h3 style="color: var(--text); margin-bottom: 16px; margin-top: 24px;">Recent Feedback</h3>
+        <div id="feedbackList" style="display: grid; gap: 12px;"></div>
       </div>
-    </div>
 
-    <!-- ANALYTICS TAB -->
-    <div id="tab-analytics" class="tab-content">
-      <div style="padding:24px;overflow-y:auto;">
-        <h2 style="margin-bottom:24px;">Analytics Dashboard</h2>
-
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;">
-          <div class="stat-box">
-            <div class="stat-value" id="analyticsOrders">0</div>
-            <div class="stat-label">Total Orders</div>
+      <!-- ANALYTICS TAB -->
+      <div id="tab-analytics" class="tab-content">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Analytics & Reports</div>
+            <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">Sales performance and insights</p>
           </div>
-          <div class="stat-box">
-            <div class="stat-value" id="analyticsRevenue">$0</div>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-card">
             <div class="stat-label">Total Revenue</div>
+            <div class="stat-value" id="analyticsRevenue">$0</div>
           </div>
-          <div class="stat-box">
+          <div class="stat-card">
+            <div class="stat-label">Total Orders</div>
+            <div class="stat-value" id="analyticsOrders">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Average Order</div>
             <div class="stat-value" id="analyticsAvgOrder">$0</div>
-            <div class="stat-label">Avg Order Value</div>
           </div>
-          <div class="stat-box">
-            <div class="stat-value" id="analyticsPeakHour">-</div>
+          <div class="stat-card">
             <div class="stat-label">Peak Hour</div>
+            <div class="stat-value" id="analyticsPeakHour">-</div>
           </div>
         </div>
 
-        <h3 style="margin:20px 0 12px;">Top Selling Items</h3>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Dish Name</th>
-              <th>Orders</th>
-              <th>Revenue</th>
-            </tr>
-          </thead>
-          <tbody id="topItemsList"></tbody>
-        </table>
-
-        <h3 style="margin:20px 0 12px;">Hourly Orders</h3>
-        <div class="chart-container" id="chartContainer">
-          <canvas id="hourlyChart"></canvas>
-        </div>
+        <h3 style="color: var(--text); margin-bottom: 16px; margin-top: 24px;">Top Selling Items</h3>
+        <div id="topSellingList" style="display: grid; gap: 12px;"></div>
       </div>
-    </div>
 
-    <!-- SETTINGS TAB -->
-    <div id="tab-settings" class="tab-content">
-      <div style="padding:24px;overflow-y:auto;max-width:600px;">
-        <h2 style="margin-bottom:24px;">Admin Settings</h2>
-
-        <div class="card">
-          <div class="card-title">🔊 Voice Notifications</div>
-          <label style="display:flex;align-items:center;gap:10px;margin:10px 0;">
-            <input type="checkbox" id="voiceNotif" onchange="saveSettings()"> Enable voice alerts for new orders
-          </label>
-          <label style="display:flex;align-items:center;gap:10px;margin:10px 0;">
-            <input type="checkbox" id="soundNotif" onchange="saveSettings()"> Play sound notification
-          </label>
-          <button class="btn btn-secondary" onclick="testVoiceAlert()" style="margin-top:10px;">🔊 Test Voice</button>
-        </div>
-
-        <div class="card">
-          <div class="card-title">🖨️ Print Options</div>
-          <label style="display:flex;align-items:center;gap:10px;margin:10px 0;">
-            <input type="checkbox" id="autoPrint" onchange="saveSettings()"> Auto-print receipts
-          </label>
-          <label style="display:flex;align-items:center;gap:10px;margin:10px 0;">
-            <input type="checkbox" id="kitchenPrint" onchange="saveSettings()"> Print kitchen tickets
-          </label>
-        </div>
-
-        <div class="card">
-          <div class="card-title">🔐 Change Password</div>
-          <div class="form-group" style="margin-top:10px;">
-            <label class="form-label">New Password</label>
-            <input class="form-input" id="newPassword" type="password" placeholder="Enter new password">
+      <!-- SETTINGS TAB -->
+      <div id="tab-settings" class="tab-content">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Admin Settings</div>
+            <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">Configure admin preferences</p>
           </div>
-          <button class="btn btn-primary" onclick="changePassword()" style="width:100%;">Update Password</button>
         </div>
 
-        <button class="btn btn-danger" onclick="clearAllData()" style="width:100%;margin-top:24px;">🗑 Clear All Data</button>
+        <div class="card" style="max-width: 600px;">
+          <h4 style="margin-bottom: 16px; color: var(--text);">Notifications</h4>
+
+          <div class="form-group">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="voiceNotif" onchange="saveSettings()" style="width: 18px; height: 18px; cursor: pointer;">
+              <span>Voice alerts for new orders</span>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="soundNotif" onchange="saveSettings()" style="width: 18px; height: 18px; cursor: pointer;">
+              <span>Sound notifications</span>
+            </label>
+          </div>
+
+          <h4 style="margin-top: 24px; margin-bottom: 16px; color: var(--text);">Printing</h4>
+
+          <div class="form-group">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="autoPrint" onchange="saveSettings()" style="width: 18px; height: 18px; cursor: pointer;">
+              <span>Auto print kitchen orders</span>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="kitchenPrint" onchange="saveSettings()" style="width: 18px; height: 18px; cursor: pointer;">
+              <span>Print delivery tickets</span>
+            </label>
+          </div>
+
+          <h4 style="margin-top: 24px; margin-bottom: 16px; color: var(--text);">Security</h4>
+
+          <div class="form-group">
+            <label class="form-label">Change Password</label>
+            <input class="form-input" id="adminPassword" type="password" placeholder="Enter new password">
+          </div>
+
+          <button class="btn btn-primary" onclick="changeAdminPassword()" style="width: 100%;">🔐 Update Password</button>
+        </div>
       </div>
     </div>
   </div>
@@ -789,58 +927,63 @@
       <button class="modal-close" onclick="closeFoodModal()">✕</button>
     </div>
 
-    <div class="form-group">
-      <label class="form-label">Food Name</label>
-      <input class="form-input" id="foodTitle" placeholder="e.g., Grilled Salmon">
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Description</label>
-      <input class="form-input" id="foodDesc" placeholder="e.g., Atlantic salmon, asparagus...">
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Category</label>
-      <select class="form-select" id="foodCategory">
-        <option value="salads">Salads</option>
-        <option value="mains">Mains</option>
-        <option value="starters">Starters</option>
-        <option value="desserts">Desserts</option>
-      </select>
-    </div>
-
-    <div class="grid-2">
+    <div class="modal-body">
       <div class="form-group">
-        <label class="form-label">Price ($)</label>
-        <input class="form-input" id="foodPrice" type="number" step="0.01" placeholder="0.00">
+        <label class="form-label">Food Name *</label>
+        <input class="form-input" id="foodTitle" placeholder="e.g., Grilled Salmon">
       </div>
+
       <div class="form-group">
-        <label class="form-label">Calories</label>
-        <input class="form-input" id="foodCal" type="number" placeholder="0">
+        <label class="form-label">Description</label>
+        <input class="form-input" id="foodDesc" placeholder="e.g., Premium Atlantic salmon, asparagus...">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <select class="form-select" id="foodCategory">
+          <option value="">Select Category</option>
+        </select>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Price ($)</label>
+          <input class="form-input" id="foodPrice" type="number" step="0.01" placeholder="0.00">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Calories</label>
+          <input class="form-input" id="foodCal" type="number" placeholder="0">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">3D Model (GLB File)</label>
+        <input type="file" accept=".glb,.gltf" id="food3dModel" class="form-input" style="padding: 8px;">
+        <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Accepted: .glb, .gltf</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Image</label>
+        <input type="file" accept="image/*" id="foodImage" class="form-input" style="padding: 8px;">
+        <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Accepted: JPG, PNG, WebP</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Emoji</label>
+        <input class="form-input" id="foodEmoji" placeholder="🍽" maxlength="2">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Ingredients</label>
+        <textarea class="form-textarea" id="foodIngredients" placeholder="e.g., Salmon, Asparagus, Lemon, Butter&#10;(comma-separated)"></textarea>
       </div>
     </div>
 
-    <div class="form-group">
-      <label class="form-label">3D Model URL (GLB)</label>
-      <input class="form-input" id="food3dModel" placeholder="https://...">
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeFoodModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveFoodItem()">Save Item</button>
     </div>
-
-    <div class="form-group">
-      <label class="form-label">Image URL</label>
-      <input class="form-input" id="foodImage" placeholder="https://...">
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Emoji</label>
-      <input class="form-input" id="foodEmoji" placeholder="🍽" maxlength="2">
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Ingredients (comma-separated)</label>
-      <textarea class="form-textarea" id="foodIngredients" placeholder="e.g., Salmon, Asparagus, Lemon"></textarea>
-    </div>
-
-    <button class="btn btn-primary" onclick="saveFoodItem()" style="width:100%;">Save Food Item</button>
   </div>
 </div>
 
@@ -852,22 +995,22 @@
       <button class="modal-close" onclick="closeCategoryModal()">✕</button>
     </div>
 
-    <div class="form-group">
-      <label class="form-label">Category Name</label>
-      <input class="form-input" id="categoryName" placeholder="e.g., Salads">
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Category Name *</label>
+        <input class="form-input" id="categoryName" placeholder="e.g., Salads, Mains, Desserts">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Icon/Emoji</label>
+        <input class="form-input" id="categoryIcon" placeholder="📂" maxlength="2">
+      </div>
     </div>
 
-    <div class="form-group">
-      <label class="form-label">Icon</label>
-      <input class="form-input" id="categoryIcon" placeholder="🥗" maxlength="2">
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeCategoryModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveCategory()">Create</button>
     </div>
-
-    <div class="form-group">
-      <label class="form-label">Description</label>
-      <textarea class="form-textarea" id="categoryDesc" placeholder="Category description"></textarea>
-    </div>
-
-    <button class="btn btn-primary" onclick="saveCategory()" style="width:100%;">Add Category</button>
   </div>
 </div>
 
@@ -879,55 +1022,50 @@
       <button class="modal-close" onclick="closeOfferModal()">✕</button>
     </div>
 
-    <div class="form-group">
-      <label class="form-label">Offer Name</label>
-      <input class="form-input" id="offerName" placeholder="e.g., Happy Hour Discount">
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Offer Title *</label>
+        <input class="form-input" id="offerTitle" placeholder="e.g., Weekend Special">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Discount Type</label>
+        <select class="form-select" id="offerType" onchange="updateOfferType()">
+          <option value="percentage">Percentage (%)</option>
+          <option value="fixed">Fixed Amount ($)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Discount Value</label>
+        <input class="form-input" id="offerValue" type="number" step="0.01" placeholder="e.g., 20">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="form-textarea" id="offerDesc" placeholder="Describe the offer..."></textarea>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label class="form-label">Discount Type</label>
-      <select class="form-select" id="offerType">
-        <option value="percentage">Percentage (%)</option>
-        <option value="fixed">Fixed ($)</option>
-      </select>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeOfferModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveOffer()">Create Offer</button>
     </div>
-
-    <div class="form-group">
-      <label class="form-label">Discount Value</label>
-      <input class="form-input" id="offerValue" type="number" step="0.01" placeholder="0.00">
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Apply to</label>
-      <select class="form-select" id="offerApplyTo">
-        <option value="all">All Items</option>
-        <option value="category">Category</option>
-        <option value="specific">Specific Item</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Description</label>
-      <textarea class="form-textarea" id="offerDesc" placeholder="e.g., Available 5-7 PM"></textarea>
-    </div>
-
-    <button class="btn btn-primary" onclick="saveOffer()" style="width:100%;">Create Offer</button>
   </div>
 </div>
 
-<!-- TOAST NOTIFICATION -->
-<div id="toast"></div>
+<!-- TOAST CONTAINER -->
+<div id="toastContainer"></div>
 
 <script>
-// ════════════════════════════════════════════
-//  CONSTANTS
-// ════════════════════════════════════════════
-const ADMIN_USER = 'admin';
-const ADMIN_PASS = 'aura2025';
-let adminLoggedIn = false;
-let currentFilter = 'all';
-let selectedOrderId = null;
-let orders = [];
+// ════════════════════════════════════════════════════════════════════════════════════
+//  GLOBAL STATE
+// ════════════════════════════════════════════════════════════════════════════════════
+let currentTab = 'food';
+let editingFoodId = null;
+let editingCategoryId = null;
+let editingOfferId = null;
+
 let foods = {};
 let categories = [];
 let inventory = {};
@@ -935,348 +1073,150 @@ let offers = [];
 let feedback = [];
 let restaurantSettings = {};
 let adminSettings = {};
-let currentTab = 'orders';
 
-// ════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════════════
 //  INITIALIZATION
-// ════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
-  initTheme();
-  const isLoggedIn = localStorage.getItem('aura_admin_logged_in') === 'true';
-  if (isLoggedIn) {
-    adminLoggedIn = true;
-    showAdminPanel();
-    loadAllData();
-    startAutoRefresh();
-  }
+  loadAppData();
+  setupEventListeners();
+  updateCategorySelect();
+  renderAllTabs();
+  startAutoRefresh();
+  updateTime();
 });
 
-// ════════════════════════════════════════════
-//  THEME
-// ════════════════════════════════════════════
-function initTheme() {
-  const savedTheme = localStorage.getItem('aura_theme') || 'light';
-  document.documentElement.setAttribute('data-theme', savedTheme);
-}
+function loadAppData() {
+  foods = JSON.parse(localStorage.getItem('aura_dishes')) || {};
+  categories = JSON.parse(localStorage.getItem('aura_categories')) || [];
+  inventory = JSON.parse(localStorage.getItem('aura_inventory')) || {};
+  offers = JSON.parse(localStorage.getItem('aura_offers')) || [];
+  feedback = JSON.parse(localStorage.getItem('aura_feedback')) || [];
+  restaurantSettings = JSON.parse(localStorage.getItem('aura_restaurant_settings')) || {};
+  adminSettings = JSON.parse(localStorage.getItem('aura_admin_settings')) || {};
 
-function toggleTheme() {
-  const current = document.documentElement.getAttribute('data-theme') || 'light';
-  const newTheme = current === 'light' ? 'dark' : 'light';
-  document.documentElement.setAttribute('data-theme', newTheme);
-  localStorage.setItem('aura_theme', newTheme);
-}
-
-// ════════════════════════════════════════════
-//  AUTH
-// ════════════════════════════════════════════
-function adminLogin() {
-  const user = document.getElementById('loginUser').value.trim();
-  const pass = document.getElementById('loginPass').value.trim();
-  if (user === ADMIN_USER && pass === ADMIN_PASS) {
-    adminLoggedIn = true;
-    localStorage.setItem('aura_admin_logged_in', 'true');
-    showAdminPanel();
-    loadAllData();
-    startAutoRefresh();
-  } else {
-    showToast('❌ Invalid credentials');
-    document.getElementById('loginPass').value = '';
+  // Initialize with default categories if empty (sync with ar-menu)
+  if (categories.length === 0) {
+    categories = [
+      { name: 'salads', icon: '🥗' },
+      { name: 'mains', icon: '🍽' },
+      { name: 'starters', icon: '✨' },
+      { name: 'desserts', icon: '🍮' }
+    ];
+    localStorage.setItem('aura_categories', JSON.stringify(categories));
   }
 }
 
-function adminLogout() {
-  if (!confirm('Logout from admin panel?')) return;
-  adminLoggedIn = false;
-  localStorage.removeItem('aura_admin_logged_in');
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('adminPanel').style.display = 'none';
-  document.getElementById('loginUser').value = '';
-  document.getElementById('loginPass').value = '';
-}
-
-function showAdminPanel() {
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('adminPanel').style.display = 'flex';
-}
-
-// ════════════════════════════════════════════
-//  DATA LOADING
-// ════════════════════════════════════════════
-function loadAllData() {
-  try {
-    orders = JSON.parse(localStorage.getItem('aura_orders')) || [];
-  } catch { orders = []; }
-  
-  try {
-    foods = JSON.parse(localStorage.getItem('aura_dishes')) || {};
-  } catch { foods = {}; }
-
-  try {
-    categories = JSON.parse(localStorage.getItem('aura_categories')) || 
-      [{id:'salads',name:'Salads',icon:'🥗'},{id:'mains',name:'Mains',icon:'🍽'},{id:'starters',name:'Starters',icon:'✨'},{id:'desserts',name:'Desserts',icon:'🍮'}];
-  } catch { categories = []; }
-
-  try {
-    inventory = JSON.parse(localStorage.getItem('aura_inventory')) || {};
-  } catch { inventory = {}; }
-
-  try {
-    offers = JSON.parse(localStorage.getItem('aura_offers')) || [];
-  } catch { offers = []; }
-
-  try {
-    feedback = JSON.parse(localStorage.getItem('aura_feedback')) || [];
-  } catch { feedback = []; }
-
-  try {
-    restaurantSettings = JSON.parse(localStorage.getItem('aura_restaurant_settings')) || {
-      name: 'AURA Restaurant',
-      logo: '',
-      address: '',
-      phone: '',
-      hours: '10:00 AM - 11:00 PM',
-      description: 'Premium dining experience'
-    };
-  } catch { restaurantSettings = {}; }
-
-  try {
-    adminSettings = JSON.parse(localStorage.getItem('aura_admin_settings')) || {
-      voiceNotif: false,
-      soundNotif: true,
-      autoPrint: false,
-      kitchenPrint: false
-    };
-  } catch { adminSettings = {}; }
-
-  renderAllTabs();
-}
-
-function saveAllData() {
-  localStorage.setItem('aura_orders', JSON.stringify(orders));
-  localStorage.setItem('aura_dishes', JSON.stringify(foods));
-  localStorage.setItem('aura_categories', JSON.stringify(categories));
-  localStorage.setItem('aura_inventory', JSON.stringify(inventory));
-  localStorage.setItem('aura_offers', JSON.stringify(offers));
-  localStorage.setItem('aura_feedback', JSON.stringify(feedback));
-  localStorage.setItem('aura_restaurant_settings', JSON.stringify(restaurantSettings));
-  localStorage.setItem('aura_admin_settings', JSON.stringify(adminSettings));
-}
-
-// ════════════════════════════════════════════
-//  TAB SWITCHING
-// ════════════════════════════════════════════
-function switchTab(tab) {
-  currentTab = tab;
-  document.querySelectorAll('.nav-tab').forEach((b, i) => {
-    b.classList.toggle('active', b.textContent.includes(['📋','🍽','🏪','📂','📦','🎁','⭐','📊','⚙️'][['orders','food','restaurant','categories','inventory','offers','feedback','analytics','settings'].indexOf(tab)]));
+function setupEventListeners() {
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal.open').forEach(m => m.classList.remove('open'));
+    }
   });
-  
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  const tabEl = document.getElementById('tab-' + tab);
-  if (tabEl) tabEl.classList.add('active');
+}
 
-  const titles = {
-    orders: '📋 Orders',
-    food: '🍽 Food Management',
-    restaurant: '🏪 Restaurant Settings',
-    categories: '📂 Categories',
-    inventory: '📦 Inventory',
-    offers: '🎁 Special Offers',
-    feedback: '⭐ Customer Feedback',
-    analytics: '📊 Analytics',
-    settings: '⚙️ Settings'
+// ════════════════════════════════════════════════════════════════════════════════════
+//  THEME & UI
+// ════════════════════════════════════════════════════════════════════════════════════
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  localStorage.setItem('theme', isDark ? 'light' : 'dark');
+}
+
+function switchTab(tabName) {
+  currentTab = tabName;
+  document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const tabTitles = {
+    food: 'Food Menu',
+    restaurant: 'Restaurant Settings',
+    categories: 'Menu Categories',
+    inventory: 'Inventory',
+    offers: 'Special Offers',
+    feedback: 'Customer Feedback',
+    analytics: 'Analytics',
+    settings: 'Admin Settings'
   };
-  document.getElementById('topTitle').textContent = titles[tab] || 'Orders';
+
+  document.getElementById('topTitle').textContent = tabTitles[tabName];
+
+  document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+  document.getElementById(`tab-${tabName}`).classList.add('active');
+
+  if (tabName === 'restaurant') loadRestaurantSettings();
+  if (tabName === 'inventory') renderInventoryList();
+  if (tabName === 'analytics') renderAnalytics();
+  if (tabName === 'settings') loadSettings();
 }
 
-// ════════════════════════════════════════════
-//  ORDERS MANAGEMENT
-// ════════════════════════════════════════════
-function loadOrders() {
-  try {
-    orders = JSON.parse(localStorage.getItem('aura_orders')) || [];
-  } catch { orders = []; }
-  renderOrdersList();
-  updateOrderStats();
+function showToast(message) {
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = message;
+  document.getElementById('toastContainer').appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
 }
 
-function renderOrdersList() {
-  const list = document.getElementById('ordersList');
-  let filtered = orders;
-
-  if (currentFilter === 'pending') filtered = orders.filter(o => o.status === 'pending');
-  else if (currentFilter === 'accepted') filtered = orders.filter(o => o.status === 'accepted');
-  else if (currentFilter === 'preparing') filtered = orders.filter(o => o.status === 'preparing');
-  else if (currentFilter === 'completed') filtered = orders.filter(o => o.status === 'completed');
-
-  list.innerHTML = filtered.map(order => {
-    const time = new Date(order.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const statusBadges = {
-      pending: '🔴 PENDING',
-      accepted: '✅ ACCEPTED',
-      preparing: '👨‍🍳 PREPARING',
-      completed: '📦 COMPLETED'
-    };
-    return `
-      <div class="order-item ${selectedOrderId === order.id ? 'active' : ''}" onclick="selectOrder('${order.id}')">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div>
-            <div style="font-weight:600;color:var(--text);">#${order.id.split('-')[1].slice(-5)}</div>
-            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">🍽 Table ${order.tableNum}</div>
-          </div>
-          <div style="text-align:right;">
-            <div style="font-size:12px;color:var(--text-light);">${time}</div>
-            <div style="font-weight:700;color:var(--primary);margin-top:4px;">$${order.total.toFixed(2)}</div>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
+function updateTime() {
+  const now = new Date();
+  const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  const date = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  document.getElementById('timeDisplay').textContent = `${time} • ${date}`;
+  setTimeout(updateTime, 60000);
 }
 
-function selectOrder(orderId) {
-  selectedOrderId = orderId;
-  renderOrdersList();
-  renderOrderDetail();
+function startAutoRefresh() {
+  setInterval(() => {
+    loadAppData();
+    if (currentTab === 'food') renderFoodList();
+    if (currentTab === 'categories') renderCategoriesList();
+    if (currentTab === 'inventory') renderInventoryList();
+    if (currentTab === 'offers') renderOffersList();
+    if (currentTab === 'feedback') renderFeedbackList();
+    if (currentTab === 'analytics') renderAnalytics();
+  }, 2000);
 }
 
-function renderOrderDetail() {
-  if (!selectedOrderId) return;
-  const order = orders.find(o => o.id === selectedOrderId);
-  if (!order) return;
-
-  const timestamp = new Date(order.timestamp);
-  const timeStr = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-  const dateStr = timestamp.toLocaleDateString();
-
-  const itemsHtml = order.items.map(item => `
-    <div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;">
-      <div>
-        <div style="font-weight:600;">${item.qty}× ${item.name}</div>
-        ${item.note ? `<div style="font-size:11px;color:var(--text-muted);margin-top:4px;">📝 ${item.note}</div>` : ''}
-      </div>
-      <div style="font-weight:700;color:var(--primary);">$${(item.price * item.qty).toFixed(2)}</div>
-    </div>
-  `).join('');
-
-  let actionButtons = '';
-  if (order.status === 'pending') {
-    actionButtons = `
-      <button class="btn btn-success" onclick="updateOrderStatus('${order.id}', 'accepted')" style="width:100%;margin:8px 0;">✅ Accept Order</button>
-      <button class="btn btn-danger" onclick="updateOrderStatus('${order.id}', 'rejected')" style="width:100%;">🗑 Reject Order</button>
-    `;
-  } else if (order.status === 'accepted') {
-    actionButtons = `
-      <button class="btn btn-primary" onclick="updateOrderStatus('${order.id}', 'preparing')" style="width:100%;margin:8px 0;">👨‍🍳 Start Preparing</button>
-      <button class="btn btn-danger" onclick="updateOrderStatus('${order.id}', 'rejected')" style="width:100%;">❌ Cancel</button>
-    `;
-  } else if (order.status === 'preparing') {
-    actionButtons = `
-      <button class="btn btn-primary" onclick="updateOrderStatus('${order.id}', 'completed')" style="width:100%;margin:8px 0;">📦 Mark Ready</button>
-      <button class="btn btn-secondary" onclick="printReceipt('${order.id}')" style="width:100%;">🖨️ Print Receipt</button>
-    `;
-  } else if (order.status === 'completed') {
-    actionButtons = `<button class="btn" style="background:var(--success);color:#fff;width:100%;" disabled>✔️ Order Completed</button>`;
-  }
-
-  document.getElementById('orderDetail').innerHTML = `
-    <div style="margin-bottom:20px;">
-      <div style="font-family:var(--font-serif);font-size:18px;font-weight:700;margin-bottom:4px;">#${order.id.split('-')[1].slice(-5)}</div>
-      <div style="font-size:12px;color:var(--text-muted);">${dateStr} • ${timeStr}</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Order Info</div>
-      <div style="font-size:13px;margin:8px 0;"><strong>Table:</strong> ${order.tableNum}</div>
-      <div style="font-size:13px;margin:8px 0;"><strong>Items:</strong> ${order.items.length} items</div>
-      <div style="font-size:13px;margin:8px 0;"><strong>Status:</strong> <span class="badge badge-info">${order.status.toUpperCase()}</span></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Order Items</div>
-      ${itemsHtml}
-    </div>
-
-    <div class="card">
-      <div class="card-title">Totals</div>
-      <div style="display:flex;justify-content:space-between;margin:8px 0;"><span>Subtotal:</span><strong>$${order.subtotal.toFixed(2)}</strong></div>
-      <div style="display:flex;justify-content:space-between;margin:8px 0;"><span>Tax (10%):</span><strong>$${order.tax.toFixed(2)}</strong></div>
-      <div style="display:flex;justify-content:space-between;margin:8px 0;font-size:16px;font-weight:700;color:var(--primary);"><span>Total:</span><strong>$${order.total.toFixed(2)}</strong></div>
-    </div>
-
-    <div style="margin-top:16px;">
-      ${actionButtons}
-    </div>
-  `;
-}
-
-function updateOrderStatus(orderId, newStatus) {
-  const order = orders.find(o => o.id === orderId);
-  if (!order) return;
-
-  order.status = newStatus;
-  localStorage.setItem('aura_orders', JSON.stringify(orders));
-  
-  const messages = {
-    accepted: '✅ Order accepted!',
-    preparing: '👨‍🍳 Preparing order...',
-    completed: '📦 Order ready for pickup!',
-    rejected: '❌ Order rejected'
-  };
-  
-  showToast(messages[newStatus]);
-  
-  if (adminSettings.voiceNotif && newStatus === 'completed') {
-    speak('Order ready for delivery');
-  }
-  
-  renderOrdersList();
-  renderOrderDetail();
-  updateOrderStats();
-}
-
-function filterOrders(filter) {
-  currentFilter = filter;
-  renderOrdersList();
-}
-
-function updateOrderStats() {
-  const pending = orders.filter(o => o.status === 'pending').length;
-  const preparing = orders.filter(o => o.status === 'preparing').length;
-  const completed = orders.filter(o => o.status === 'completed').length;
-  const revenue = orders.filter(o => o.status === 'completed').reduce((s, o) => s + o.total, 0);
-
-  document.getElementById('statPending').textContent = pending;
-  document.getElementById('statPreparing').textContent = preparing;
-  document.getElementById('statCompleted').textContent = completed;
-  document.getElementById('statRevenue').textContent = '$' + revenue.toFixed(2);
-}
-
-// ════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════════════
 //  FOOD MANAGEMENT
-// ════════════════════════════════════════════
-function renderFoodList() {
-  const list = document.getElementById('foodList');
-  list.innerHTML = Object.entries(foods).map(([id, food]) => `
-    <div class="food-item">
-      <div class="food-item-info">
-        <div class="food-item-name">${food.title} ${food.titleEm || ''}</div>
-        <div class="food-item-meta">${food.category || ''} • ${food.cal || 0} kcal • $${food.price}</div>
-      </div>
-      <div style="display:flex;gap:8px;">
-        <button class="btn btn-secondary" onclick="editFood('${id}')">✏️ Edit</button>
-        <button class="btn btn-danger" onclick="deleteFood('${id}')">🗑 Delete</button>
-      </div>
-    </div>
-  `).join('');
+// ════════════════════════════════════════════════════════════════════════════════════
+function openAddFoodModal() {
+  editingFoodId = null;
+  document.querySelector('#foodModal .modal-title').textContent = '➕ Add New Food Item';
+  resetFoodForm();
+  document.getElementById('foodModal').classList.add('open');
 }
 
-function openAddFoodModal() {
+function editFood(id) {
+  editingFoodId = id;
+  const food = foods[id];
+  if (!food) {
+    showToast('❌ Food not found');
+    return;
+  }
+  document.querySelector('#foodModal .modal-title').textContent = '✏️ Edit Food Item';
+  document.getElementById('foodTitle').value = food.title || '';
+  document.getElementById('foodDesc').value = food.sub || '';
+  document.getElementById('foodPrice').value = food.price || '';
+  document.getElementById('foodCal').value = food.cal || '';
+  document.getElementById('foodCategory').value = food.category || '';
+  document.getElementById('foodEmoji').value = food.emoji || '🍽';
+  document.getElementById('foodIngredients').value = (food.ingredients || []).join(', ');
+  document.getElementById('food3dModel').value = '';
+  document.getElementById('foodImage').value = '';
   document.getElementById('foodModal').classList.add('open');
 }
 
 function closeFoodModal() {
   document.getElementById('foodModal').classList.remove('open');
+  editingFoodId = null;
+  resetFoodForm();
+}
+
+function resetFoodForm() {
   document.getElementById('foodTitle').value = '';
   document.getElementById('foodDesc').value = '';
   document.getElementById('foodPrice').value = '';
@@ -1294,7 +1234,15 @@ function saveFoodItem() {
     return;
   }
 
-  const id = 'food_' + Date.now();
+  const id = editingFoodId || ('food_' + Date.now());
+  let uploadCount = 0;
+  let totalUploads = 0;
+
+  const imageFile = document.getElementById('foodImage').files[0];
+  const modelFile = document.getElementById('food3dModel').files[0];
+
+  totalUploads = (imageFile ? 1 : 0) + (modelFile ? 1 : 0);
+
   foods[id] = {
     title: title,
     titleEm: '',
@@ -1302,8 +1250,8 @@ function saveFoodItem() {
     price: parseFloat(document.getElementById('foodPrice').value) || 0,
     cal: parseInt(document.getElementById('foodCal').value) || 0,
     category: document.getElementById('foodCategory').value,
-    glb: document.getElementById('food3dModel').value,
-    image: document.getElementById('foodImage').value,
+    glb: '',
+    image: '',
     emoji: document.getElementById('foodEmoji').value || '🍽',
     ingredients: document.getElementById('foodIngredients').value.split(',').map(i => i.trim()).filter(i => i),
     nutrition: [
@@ -1311,17 +1259,40 @@ function saveFoodItem() {
     ]
   };
 
-  localStorage.setItem('aura_dishes', JSON.stringify(foods));
-  inventory[id] = {
-    stock: 50,
-    status: 'available'
-  };
-  localStorage.setItem('aura_inventory', JSON.stringify(inventory));
+  if (imageFile) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      foods[id].image = e.target.result;
+      uploadCount++;
+      if (uploadCount === totalUploads) completeFoodItemSave(id);
+    };
+    reader.readAsDataURL(imageFile);
+  }
 
-  showToast('✅ Food item added!');
+  if (modelFile) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      foods[id].glb = e.target.result;
+      uploadCount++;
+      if (uploadCount === totalUploads) completeFoodItemSave(id);
+    };
+    reader.readAsDataURL(modelFile);
+  }
+
+  if (totalUploads === 0) {
+    completeFoodItemSave(id);
+  }
+}
+
+function completeFoodItemSave(id) {
+  if (!inventory[id]) {
+    inventory[id] = 100;
+  }
+  localStorage.setItem('aura_dishes', JSON.stringify(foods));
+  localStorage.setItem('aura_inventory', JSON.stringify(inventory));
+  showToast('✅ Food item saved');
   closeFoodModal();
   renderFoodList();
-  renderInventoryList();
 }
 
 function deleteFood(id) {
@@ -1330,14 +1301,41 @@ function deleteFood(id) {
   delete inventory[id];
   localStorage.setItem('aura_dishes', JSON.stringify(foods));
   localStorage.setItem('aura_inventory', JSON.stringify(inventory));
-  showToast('✅ Food item deleted');
+  showToast('✅ Food deleted');
   renderFoodList();
-  renderInventoryList();
 }
 
-// ════════════════════════════════════════════
+function renderFoodList() {
+  const list = document.getElementById('foodList');
+  if (Object.keys(foods).length === 0) {
+    list.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 48px; margin-bottom: 12px;">🍽</div><p>No food items yet. Add one to get started!</p></div>';
+    return;
+  }
+
+  list.innerHTML = Object.entries(foods).map(([id, food]) => `
+    <div class="item-card">
+      <div class="item-header">
+        <div class="item-title">${food.title} ${food.emoji || ''}</div>
+        <div class="badge badge-primary">$${food.price.toFixed(2)}</div>
+      </div>
+      <div class="item-meta">
+        <span>📝 ${food.category || 'Uncategorized'}</span>
+        <span>🔥 ${food.cal || 0} kcal</span>
+      </div>
+      <div class="item-content">
+        <p>${food.sub || 'No description'}</p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-secondary btn-small" onclick="editFood('${id}')">✏️ Edit</button>
+        <button class="btn btn-danger btn-small" onclick="deleteFood('${id}')">🗑 Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ════════════════════════════════════════════════════════════════════════════════════
 //  RESTAURANT SETTINGS
-// ════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════════════
 function loadRestaurantSettings() {
   document.getElementById('restName').value = restaurantSettings.name || '';
   document.getElementById('restLogo').value = restaurantSettings.logo || '';
@@ -1357,32 +1355,39 @@ function saveRestaurantSettings() {
     description: document.getElementById('restDesc').value
   };
   localStorage.setItem('aura_restaurant_settings', JSON.stringify(restaurantSettings));
-  showToast('✅ Settings saved!');
+  showToast('✅ Restaurant settings saved');
 }
 
-// ════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════════════
 //  CATEGORIES
-// ════════════════════════════════════════════
-function renderCategoriesList() {
-  const list = document.getElementById('categoriesList');
-  list.innerHTML = categories.map(cat => `
-    <div class="card">
-      <div class="card-title">${cat.icon || '📂'} ${cat.name}</div>
-      <div style="font-size:12px;color:var(--text-muted);margin:8px 0;">${cat.description || ''}</div>
-      <button class="btn btn-danger" onclick="deleteCategory('${cat.id}')" style="margin-top:10px;">🗑 Delete</button>
-    </div>
-  `).join('');
+// ════════════════════════════════════════════════════════════════════════════════════
+function updateCategorySelect() {
+  const select = document.getElementById('foodCategory');
+  select.innerHTML = '<option value="">Select Category</option>' + categories.map(c => 
+    `<option value="${c.name}">${c.icon || '📂'} ${c.name}</option>`
+  ).join('');
 }
 
 function openAddCategoryModal() {
+  editingCategoryId = null;
+  document.querySelector('#categoryModal .modal-title').textContent = '➕ Add New Category';
+  document.getElementById('categoryName').value = '';
+  document.getElementById('categoryIcon').value = '';
+  document.getElementById('categoryModal').classList.add('open');
+}
+
+function editCategory(id) {
+  editingCategoryId = id;
+  const cat = categories[id];
+  document.querySelector('#categoryModal .modal-title').textContent = '✏️ Edit Category';
+  document.getElementById('categoryName').value = cat.name;
+  document.getElementById('categoryIcon').value = cat.icon || '';
   document.getElementById('categoryModal').classList.add('open');
 }
 
 function closeCategoryModal() {
   document.getElementById('categoryModal').classList.remove('open');
-  document.getElementById('categoryName').value = '';
-  document.getElementById('categoryIcon').value = '';
-  document.getElementById('categoryDesc').value = '';
+  editingCategoryId = null;
 }
 
 function saveCategory() {
@@ -1392,181 +1397,248 @@ function saveCategory() {
     return;
   }
 
-  categories.push({
-    id: name.toLowerCase().replace(/\s+/g, '_'),
-    name: name,
-    icon: document.getElementById('categoryIcon').value || '📂',
-    description: document.getElementById('categoryDesc').value
-  });
+  if (editingCategoryId !== null) {
+    categories[editingCategoryId] = {
+      name: name,
+      icon: document.getElementById('categoryIcon').value || '📂'
+    };
+  } else {
+    categories.push({
+      name: name,
+      icon: document.getElementById('categoryIcon').value || '📂'
+    });
+  }
 
   localStorage.setItem('aura_categories', JSON.stringify(categories));
-  showToast('✅ Category added!');
+  showToast('✅ Category saved');
   closeCategoryModal();
+  updateCategorySelect();
   renderCategoriesList();
 }
 
 function deleteCategory(id) {
   if (!confirm('Delete this category?')) return;
-  categories = categories.filter(c => c.id !== id);
+  categories.splice(id, 1);
   localStorage.setItem('aura_categories', JSON.stringify(categories));
   showToast('✅ Category deleted');
+  updateCategorySelect();
   renderCategoriesList();
 }
 
-// ════════════════════════════════════════════
-//  INVENTORY
-// ════════════════════════════════════════════
-function renderInventoryList() {
-  const list = document.getElementById('inventoryList');
-  list.innerHTML = Object.entries(inventory).map(([id, inv]) => {
-    const food = foods[id];
-    const foodName = food ? `${food.title} ${food.titleEm || ''}` : id;
-    const status = inv.stock > 20 ? 'Available' : inv.stock > 0 ? 'Low Stock' : 'Out of Stock';
-    const statusBadge = inv.stock > 20 ? 'badge-success' : inv.stock > 0 ? 'badge-warning' : 'badge-danger';
+function renderCategoriesList() {
+  const list = document.getElementById('categoriesList');
+  if (categories.length === 0) {
+    list.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-muted); grid-column: 1 / -1;"><div style="font-size: 48px; margin-bottom: 12px;">📂</div><p>No categories yet. Create one to organize your menu!</p></div>';
+    return;
+  }
 
-    return `
-      <tr>
-        <td>${foodName}</td>
-        <td>
-          <input type="number" value="${inv.stock}" onchange="updateInventory('${id}', this.value)" style="width:60px;padding:6px;border:1px solid var(--border);border-radius:6px;">
-        </td>
-        <td><span class="badge ${statusBadge}">${status}</span></td>
-        <td>
-          <button class="btn btn-secondary" onclick="updateInventory('${id}', ${inv.stock + 10})">+10</button>
-        </td>
-      </tr>
-    `;
-  }).join('');
-}
-
-function updateInventory(id, stock) {
-  inventory[id] = { stock: parseInt(stock) || 0, status: parseInt(stock) > 0 ? 'available' : 'out_of_stock' };
-  localStorage.setItem('aura_inventory', JSON.stringify(inventory));
-  renderInventoryList();
-}
-
-// ════════════════════════════════════════════
-//  SPECIAL OFFERS
-// ════════════════════════════════════════════
-function renderOffersList() {
-  const list = document.getElementById('offersList');
-  list.innerHTML = offers.map((offer, idx) => `
-    <div class="card">
-      <div class="card-title">🎁 ${offer.name}</div>
-      <div style="font-size:12px;color:var(--text-muted);margin:8px 0;">
-        ${offer.type === 'percentage' ? `${offer.value}% OFF` : `$${offer.value} OFF`} - ${offer.description}
+  list.innerHTML = categories.map((cat, idx) => `
+    <div class="item-card">
+      <div class="item-header">
+        <div style="font-size: 24px;">${cat.icon || '📂'}</div>
       </div>
-      <button class="btn btn-danger" onclick="deleteOffer(${idx})" style="margin-top:10px;">🗑 Delete</button>
+      <div class="item-title">${cat.name}</div>
+      <div class="item-actions" style="margin-top: 12px;">
+        <button class="btn btn-secondary btn-small" onclick="editCategory(${idx})">✏️ Edit</button>
+        <button class="btn btn-danger btn-small" onclick="deleteCategory(${idx})">🗑 Delete</button>
+      </div>
     </div>
   `).join('');
 }
 
+// ════════════════════════════════════════════════════════════════════════════════════
+//  INVENTORY
+// ════════════════════════════════════════════════════════════════════════════════════
+function renderInventoryList() {
+  const tbody = document.getElementById('inventoryList');
+  const items = Object.entries(foods).map(([id, food]) => {
+    const stock = inventory[id] || 0;
+    const status = stock === 0 ? 'Out' : stock < 10 ? 'Low' : 'In Stock';
+    const statusClass = stock === 0 ? 'danger' : stock < 10 ? 'warning' : 'success';
+    
+    return `
+      <tr>
+        <td><strong>${food.title}</strong></td>
+        <td>${stock} units</td>
+        <td><span class="badge badge-${statusClass}">${status}</span></td>
+        <td>
+          <input type="number" value="${stock}" min="0" style="width: 60px; padding: 6px; border: 1px solid var(--border); border-radius: 6px;" onchange="updateInventory('${id}', this.value)">
+        </td>
+      </tr>
+    `;
+  });
+
+  tbody.innerHTML = items.length > 0 ? items.join('') : '<tr><td colspan="4" style="text-align: center; padding: 40px; color: var(--text-muted);">No items in inventory</td></tr>';
+}
+
+function updateInventory(id, value) {
+  inventory[id] = parseInt(value) || 0;
+  localStorage.setItem('aura_inventory', JSON.stringify(inventory));
+  showToast('✅ Inventory updated');
+  renderInventoryList();
+}
+
+// ════════════════════════════════════════════════════════════════════════════════════
+//  SPECIAL OFFERS
+// ════════════════════════════════════════════════════════════════════════════════════
 function openAddOfferModal() {
+  editingOfferId = null;
+  document.querySelector('#offerModal .modal-title').textContent = '➕ Create Special Offer';
+  document.getElementById('offerTitle').value = '';
+  document.getElementById('offerType').value = 'percentage';
+  document.getElementById('offerValue').value = '';
+  document.getElementById('offerDesc').value = '';
+  document.getElementById('offerModal').classList.add('open');
+}
+
+function editOffer(id) {
+  editingOfferId = id;
+  const offer = offers[id];
+  document.querySelector('#offerModal .modal-title').textContent = '✏️ Edit Offer';
+  document.getElementById('offerTitle').value = offer.title;
+  document.getElementById('offerType').value = offer.type;
+  document.getElementById('offerValue').value = offer.value;
+  document.getElementById('offerDesc').value = offer.description;
   document.getElementById('offerModal').classList.add('open');
 }
 
 function closeOfferModal() {
   document.getElementById('offerModal').classList.remove('open');
+  editingOfferId = null;
+}
+
+function updateOfferType() {
+  // Update label if needed
 }
 
 function saveOffer() {
-  const name = document.getElementById('offerName').value.trim();
-  if (!name) {
-    showToast('❌ Please enter offer name');
+  const title = document.getElementById('offerTitle').value.trim();
+  if (!title) {
+    showToast('❌ Please enter offer title');
     return;
   }
 
-  offers.push({
-    name: name,
+  const offer = {
+    title: title,
     type: document.getElementById('offerType').value,
     value: parseFloat(document.getElementById('offerValue').value) || 0,
-    applyTo: document.getElementById('offerApplyTo').value,
     description: document.getElementById('offerDesc').value
-  });
+  };
+
+  if (editingOfferId !== null) {
+    offers[editingOfferId] = offer;
+  } else {
+    offers.push(offer);
+  }
 
   localStorage.setItem('aura_offers', JSON.stringify(offers));
-  showToast('✅ Offer created!');
+  showToast('✅ Offer saved');
   closeOfferModal();
   renderOffersList();
 }
 
-function deleteOffer(idx) {
+function deleteOffer(id) {
   if (!confirm('Delete this offer?')) return;
-  offers.splice(idx, 1);
+  offers.splice(id, 1);
   localStorage.setItem('aura_offers', JSON.stringify(offers));
   showToast('✅ Offer deleted');
   renderOffersList();
 }
 
-// ════════════════════════════════════════════
-//  CUSTOMER FEEDBACK
-// ════════════════════════════════════════════
-function renderFeedbackList() {
-  const list = document.getElementById('feedbackList');
-  
-  // Add some sample feedback
-  const sampleFeedback = [
-    { rating: 5, comment: 'Excellent service and food quality!', date: new Date().toLocaleDateString() },
-    { rating: 4, comment: 'Good food, a bit slow on order taking', date: new Date().toLocaleDateString() },
-    { rating: 5, comment: 'Amazing AR experience! The 3D models are stunning.', date: new Date().toLocaleDateString() }
-  ];
+function renderOffersList() {
+  const list = document.getElementById('offersList');
+  if (offers.length === 0) {
+    list.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-muted); grid-column: 1 / -1;"><div style="font-size: 48px; margin-bottom: 12px;">🎁</div><p>No offers yet. Create one to boost sales!</p></div>';
+    return;
+  }
 
-  list.innerHTML = sampleFeedback.map(fb => `
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:start;">
-        <div>
-          <div style="margin-bottom:8px;">${'⭐'.repeat(fb.rating)}${'☆'.repeat(5-fb.rating)}</div>
-          <div style="color:var(--text);">${fb.comment}</div>
-          <div style="font-size:11px;color:var(--text-muted);margin-top:8px;">${fb.date}</div>
-        </div>
+  list.innerHTML = offers.map((offer, idx) => `
+    <div class="item-card">
+      <div class="item-header">
+        <div class="item-title">${offer.title}</div>
+        <div class="badge badge-primary">${offer.type === 'percentage' ? offer.value + '%' : '$' + offer.value}</div>
+      </div>
+      <div class="item-content">
+        <p>${offer.description || 'Special offer'}</p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-secondary btn-small" onclick="editOffer(${idx})">✏️ Edit</button>
+        <button class="btn btn-danger btn-small" onclick="deleteOffer(${idx})">🗑 Delete</button>
       </div>
     </div>
   `).join('');
 }
 
-// ════════════════════════════════════════════
-//  ANALYTICS
-// ════════════════════════════════════════════
-function renderAnalytics() {
-  const totalOrders = orders.length;
-  const totalRevenue = orders.reduce((s, o) => s + o.total, 0);
-  const avgOrder = totalOrders > 0 ? totalRevenue / totalOrders : 0;
+// ════════════════════════════════════════════════════════════════════════════════════
+//  FEEDBACK
+// ════════════════════════════════════════════════════════════════════════════════════
+function renderFeedbackList() {
+  const list = document.getElementById('feedbackList');
+  if (feedback.length === 0) {
+    list.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 48px; margin-bottom: 12px;">⭐</div><p>No feedback yet</p></div>';
+    return;
+  }
 
-  document.getElementById('analyticsOrders').textContent = totalOrders;
-  document.getElementById('analyticsRevenue').textContent = '$' + totalRevenue.toFixed(2);
-  document.getElementById('analyticsAvgOrder').textContent = '$' + avgOrder.toFixed(2);
-
-  // Top selling items
-  const itemCounts = {};
-  orders.forEach(order => {
-    order.items.forEach(item => {
-      itemCounts[item.name] = (itemCounts[item.name] || 0) + item.qty;
-    });
-  });
-
-  const topItems = Object.entries(itemCounts)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 5);
-
-  const topList = document.getElementById('topItemsList');
-  topList.innerHTML = topItems.map(([name, count]) => {
-    const revenue = orders
-      .filter(o => o.items.some(i => i.name === name))
-      .reduce((s, o) => s + o.items.find(i => i.name === name).price * o.items.find(i => i.name === name).qty, 0);
-    return `
-      <tr>
-        <td>${name}</td>
-        <td>${count}</td>
-        <td>$${revenue.toFixed(2)}</td>
-      </tr>
-    `;
-  }).join('');
+  list.innerHTML = feedback.map(fb => `
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+        <div><strong>${fb.name || 'Anonymous'}</strong></div>
+        <div>⭐ ${fb.rating || 5}</div>
+      </div>
+      <p style="color: var(--text-light); font-size: 13px;">${fb.comment || 'No comment'}</p>
+      <div style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">${new Date(fb.date).toLocaleDateString()}</div>
+    </div>
+  `).join('');
 }
 
-// ════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════════════
+//  ANALYTICS
+// ════════════════════════════════════════════════════════════════════════════════════
+function renderAnalytics() {
+  const orders = JSON.parse(localStorage.getItem('aura_orders')) || [];
+  let totalRevenue = 0;
+  let ordersByHour = {};
+
+  orders.forEach(order => {
+    if (order.total) totalRevenue += order.total;
+    if (order.time) {
+      const hour = new Date(order.time).getHours();
+      ordersByHour[hour] = (ordersByHour[hour] || 0) + 1;
+    }
+  });
+
+  const avgOrder = orders.length > 0 ? (totalRevenue / orders.length).toFixed(2) : 0;
+  const peakHour = Object.entries(ordersByHour).sort((a, b) => b[1] - a[1])[0];
+
+  document.getElementById('analyticsRevenue').textContent = '$' + totalRevenue.toFixed(2);
+  document.getElementById('analyticsOrders').textContent = orders.length;
+  document.getElementById('analyticsAvgOrder').textContent = '$' + avgOrder;
+  document.getElementById('analyticsPeakHour').textContent = peakHour ? peakHour[0] + ':00' : '-';
+
+  // Top selling items
+  const topItems = Object.entries(foods).map(([id, food]) => {
+    let sold = 0;
+    orders.forEach(order => {
+      if (order.items) {
+        order.items.forEach(item => { if (item.id === id) sold += item.qty; });
+      }
+    });
+    return { id, food, sold };
+  }).sort((a, b) => b.sold - a.sold).slice(0, 5);
+
+  const topList = document.getElementById('topSellingList');
+  topList.innerHTML = topItems.map(item => `
+    <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
+      <div><strong>${item.food.title}</strong></div>
+      <div class="badge badge-primary">${item.sold} sold</div>
+    </div>
+  `).join('');
+}
+
+// ════════════════════════════════════════════════════════════════════════════════════
 //  SETTINGS
-// ════════════════════════════════════════════
-function loadAdminSettings() {
+// ════════════════════════════════════════════════════════════════════════════════════
+function loadSettings() {
   document.getElementById('voiceNotif').checked = adminSettings.voiceNotif || false;
   document.getElementById('soundNotif').checked = adminSettings.soundNotif || false;
   document.getElementById('autoPrint').checked = adminSettings.autoPrint || false;
@@ -1581,112 +1653,36 @@ function saveSettings() {
     kitchenPrint: document.getElementById('kitchenPrint').checked
   };
   localStorage.setItem('aura_admin_settings', JSON.stringify(adminSettings));
-  showToast('✅ Settings saved!');
+  showToast('✅ Settings saved');
 }
 
-function testVoiceAlert() {
-  speak('New order received');
-  showToast('🔊 Voice alert test');
-}
-
-function speak(text) {
-  if ('speechSynthesis' in window && adminSettings.voiceNotif) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    speechSynthesis.speak(utterance);
-  }
-}
-
-function changePassword() {
-  const newPass = document.getElementById('newPassword').value;
+function changeAdminPassword() {
+  const newPass = document.getElementById('adminPassword').value;
   if (!newPass) {
     showToast('❌ Please enter new password');
     return;
   }
-  // In a real app, this would be hashed and stored securely
-  showToast('✅ Password would be changed (demo mode)');
-  document.getElementById('newPassword').value = '';
+  localStorage.setItem('admin_password', newPass);
+  document.getElementById('adminPassword').value = '';
+  showToast('✅ Password changed');
 }
 
-function printReceipt(orderId) {
-  const order = orders.find(o => o.id === orderId);
-  if (!order) return;
-
-  let content = `
-    RECEIPT\n
-    Order #${order.id.split('-')[1].slice(-4)}\n
-    Table: ${order.tableNum}\n
-    ${new Date(order.timestamp).toLocaleString()}\n\n
-    ${order.items.map(i => `${i.qty}x ${i.name} - $${(i.price * i.qty).toFixed(2)}`).join('\n')}\n\n
-    Subtotal: $${order.subtotal.toFixed(2)}\n
-    Tax: $${order.tax.toFixed(2)}\n
-    TOTAL: $${order.total.toFixed(2)}\n\n
-    Thank you for your order!
-  `;
-
-  const win = window.open('', '', 'width=600,height=600');
-  win.document.write('<pre>' + content + '</pre>');
-  win.document.close();
-  win.print();
-}
-
-function clearAllData() {
-  if (!confirm('Clear ALL data? This cannot be undone!')) return;
-  localStorage.clear();
-  showToast('✅ All data cleared');
-  location.reload();
-}
-
-// ════════════════════════════════════════════
-//  UTILITIES
-// ════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════════════
+//  RENDER ALL
+// ════════════════════════════════════════════════════════════════════════════════════
 function renderAllTabs() {
-  loadOrders();
   renderFoodList();
-  loadRestaurantSettings();
   renderCategoriesList();
-  renderInventoryList();
   renderOffersList();
   renderFeedbackList();
   renderAnalytics();
-  loadAdminSettings();
 }
 
-function refreshData() {
-  loadAllData();
-  showToast('🔄 Data refreshed!');
-}
-
-function startAutoRefresh() {
-  setInterval(() => {
-    if (currentTab === 'orders') loadOrders();
-    if (currentTab === 'analytics') renderAnalytics();
-  }, 2000);
-}
-
-function showToast(msg) {
-  const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.style.display = 'block';
-  setTimeout(() => { toast.style.display = 'none'; }, 3000);
-}
-
-// Close modals on bg click
-document.getElementById('foodModal').addEventListener('click', function(e) {
-  if (e.target === this) closeFoodModal();
-});
-document.getElementById('categoryModal').addEventListener('click', function(e) {
-  if (e.target === this) closeCategoryModal();
-});
-document.getElementById('offerModal').addEventListener('click', function(e) {
-  if (e.target === this) closeOfferModal();
-});
-
-// Enter key on login
-document.addEventListener('keypress', function(e) {
-  if (e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') {
-    adminLogin();
+function adminLogout() {
+  if (confirm('Logout?')) {
+    window.location.href = 'admin-panel.html';
   }
-});
+}
 </script>
 
 </body>
