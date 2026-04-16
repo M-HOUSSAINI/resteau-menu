@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA — Admin Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #ffffff;
+      --surface:   #f8f9fa;
+      --card:      #ffffff;
+      --border:    #e8e8e8;
+      --primary:   #ffc107;
+      --primary-dark: #ffb300;
+      --accent:    #ff6b35;
+      --text:      #1a1a1a;
+      --text-light: #6b7280;
+      --text-muted: #9ca3af;
+      --danger:    #ef4444;
+      --success:   #10b981;
+      --warning:   #f59e0b;
+      --info:      #3b82f6;
+      --radius:    16px;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans:  'DM Sans', sans-serif;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    :root[data-theme="dark"] {
+      --bg:        #0f1419;
+      --surface:   #1a1f2e;
+      --card:      #242d3d;
+      --border:    #3a4557;
+      --primary:   #ffc107;
+      --accent:    #ff6b35;
+      --text:      #f5f6fa;
+      --text-light: #a0abb8;
+      --text-muted: #7a8696;
+      --danger:    #ff5555;
+      --success:   #4ade80;
+      --warning:   #fbbf24;
+      --info:      #60a5fa;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    html, body {
+      min-height: 100dvh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* LAYOUT */
+    .admin-container { 
+      display: flex; 
+      height: 100dvh; 
+    }
+
+    /* SIDEBAR */
+    .admin-sidebar {
+      width: 310px;
+      background: var(--card);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .admin-header {
+      padding: 24px 20px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .admin-logo {
+      font-family: var(--font-serif);
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .admin-logo span { color: var(--primary); }
+
+    .admin-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 600;
+    }
+
+    /* STATS */
+    .admin-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .stat-val {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stat-key {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    /* FILTER TABS */
+    .filter-tabs {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px;
+      flex-shrink: 0;
+    }
+
+    .filter-btn {
+      padding: 12px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--primary);
+      color: var(--text);
+      background: #fff8e1;
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #000;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+    }
+
+    .filter-count {
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(255, 193, 7, 0.2);
+      padding: 2px 8px;
+      border-radius: 50px;
+      color: var(--accent);
+    }
+
+    .filter-btn.active .filter-count {
+      background: rgba(0, 0, 0, 0.2);
+      color: #000;
+    }
+
+    /* ORDERS LIST */
+    .orders-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+    }
+
+    .order-item {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+    }
+
+    .order-item:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-md);
+      transform: translateX(-2px);
+    }
+
+    .order-item.active {
+      border-color: var(--primary);
+      background: #fff8e1;
+      box-shadow: 0 6px 20px rgba(255, 193, 7, 0.25);
+    }
+
+    .order-item.accepted {
+      border-left: 4px solid var(--success);
+    }
+
+    .order-item.preparing {
+      border-left: 4px solid var(--warning);
+    }
+
+    .order-item.completed {
+      border-left: 4px solid var(--info);
+    }
+
+    .order-id {
+      font-family: var(--font-serif);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .order-table {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .order-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .order-time {
+      font-weight: 500;
+    }
+
+    .order-amount {
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 12px;
+    }
+
+    .order-status-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: 50px;
+      text-transform: uppercase;
+      background: var(--surface);
+      color: var(--text-muted);
+    }
+
+    .order-status-badge.pending {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+    }
+
+    .order-status-badge.accepted {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+
+    .order-status-badge.preparing {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--warning);
+    }
+
+    .order-status-badge.completed {
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--info);
+    }
+
+    /* LOG OUT BUTTON */
+    .logout-btn {
+      margin: 12px;
+      padding: 12px;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 10px;
+      color: var(--danger);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .logout-btn:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: var(--danger);
+    }
+
+    /* MAIN CONTENT */
+    .admin-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+    }
+
+    .admin-top-bar {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      background: var(--card);
+    }
+
+    .top-title {
+      font-family: var(--font-serif);
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--text);
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      color: var(--text);
+      transition: all 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: #fff8e1;
+      transform: translateY(-2px);
+    }
+
+    /* ORDER DETAIL */
+    .order-detail {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 24px;
+    }
+
+    .detail-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .detail-placeholder-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+
+    .detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .detail-title {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .detail-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 500;
+    }
+
+    .detail-right {
+      text-align: right;
+    }
+
+    .detail-status {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 50px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    .detail-status.pending {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+    }
+
+    .detail-status.accepted {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+
+    .detail-status.preparing {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--warning);
+    }
+
+    .detail-status.completed {
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--info);
+    }
+
+    .detail-amount {
+      font-family: var(--font-serif);
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* META INFO */
+    .detail-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .meta-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .meta-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .meta-val {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      font-family: var(--font-serif);
+    }
+
+    /* ITEMS */
+    .order-items {
+      margin-bottom: 24px;
+    }
+
+    .items-title {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .item-row {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .item-info {
+      flex: 1;
+    }
+
+    .item-name {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .item-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .item-qty-price {
+      text-align: right;
+    }
+
+    .item-qty {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .item-price {
+      font-weight: 700;
+      color: var(--primary);
+      font-family: var(--font-serif);
+    }
+
+    /* TOTALS */
+    .order-totals {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .total-row:last-child {
+      margin-bottom: 0;
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--primary);
+      font-family: var(--font-serif);
+    }
+
+    /* ACTION BUTTONS */
+    .detail-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .action-btn {
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: var(--font-sans);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .action-btn.primary {
+      background: linear-gradient(135deg, #ffc107, #ffb300);
+      color: #000;
+      grid-column: 1 / -1;
+    }
+
+    .action-btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .action-btn.secondary {
+      background: var(--success);
+      color: #fff;
+    }
+
+    .action-btn.secondary:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .action-btn.warning {
+      background: var(--warning);
+      color: #000;
+    }
+
+    .action-btn.warning:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .action-btn.danger {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+      border: 1px solid var(--danger);
+    }
+
+    .action-btn.danger:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .action-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* LOGIN */
+    .login-container {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-container.open {
+      display: flex;
+    }
+
+    .login-card {
+      background: var(--card);
+      border-radius: 24px;
+      padding: 40px 32px;
+      max-width: 380px;
+      width: 100%;
+      box-shadow: var(--shadow-lg);
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .login-title {
+      font-family: var(--font-serif);
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .login-sub {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-bottom: 24px;
+    }
+
+    .login-field {
+      margin-bottom: 14px;
+    }
+
+    .login-label {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .login-input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      color: var(--text);
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .login-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.1);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #ffc107, #ffb300);
+      color: #000;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 18px;
+      font-family: var(--font-sans);
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .login-info {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 16px;
+      font-weight: 500;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--card);
+      color: var(--text);
+      padding: 14px 18px;
+      border-radius: 10px;
+      box-shadow: var(--shadow-md);
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 999;
+    }
+
+    .toast.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-muted);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .admin-sidebar { width: 280px; }
+      .admin-container { flex-direction: column; }
+      .admin-sidebar { width: 100%; }
+      .admin-main { display: none; }
+      .admin-main.open { display: flex; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-container" id="loginContainer">
+  <div class="login-card">
+    <div class="login-title">AURA</div>
+    <div class="login-sub">Admin Panel Access</div>
+    <div class="login-field">
+      <div class="login-label">Username</div>
+      <input class="login-input" id="loginUser" type="text" placeholder="admin" autocomplete="off">
+    </div>
+    <div class="login-field">
+      <div class="login-label">Password</div>
+      <input class="login-input" id="loginPass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="login-btn" onclick="doLogin()">Sign In →</button>
+    <div class="login-info">Default: admin / aura2025</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="admin-container">
+
+  <!-- SIDEBAR -->
+  <div class="admin-sidebar">
+    <div class="admin-header">
+      <div class="admin-logo">AU<span>R</span>A</div>
+      <div class="admin-subtitle">Order Manager</div>
+    </div>
+
+    <!-- STATS -->
+    <div class="admin-stats">
+      <div class="stat-box">
+        <div class="stat-val" id="statPending">0</div>
+        <div class="stat-key">New</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="statPreparing">0</div>
+        <div class="stat-key">Preparing</div>
+      </div>
+    </div>
+
+    <!-- FILTER -->
+    <div class="filter-tabs">
+      <button class="filter-btn active" onclick="filterOrders('all')">
+        <span>📋 All Orders</span>
+        <span class="filter-count" id="countAll">0</span>
+      </button>
+      <button class="filter-btn" onclick="filterOrders('pending')">
+        <span>🔴 New Orders</span>
+        <span class="filter-count" id="countPending">0</span>
+      </button>
+      <button class="filter-btn" onclick="filterOrders('accepted')">
+        <span>✅ Accepted</span>
+        <span class="filter-count" id="countAccepted">0</span>
+      </button>
+      <button class="filter-btn" onclick="filterOrders('preparing')">
+        <span>👨‍🍳 Preparing</span>
+        <span class="filter-count" id="countPreparing">0</span>
+      </button>
+      <button class="filter-btn" onclick="filterOrders('completed')">
+        <span>✔️ Completed</span>
+        <span class="filter-count" id="countCompleted">0</span>
+      </button>
+    </div>
+
+    <!-- ORDERS -->
+    <div class="orders-list" id="ordersList"></div>
+
+    <button class="logout-btn" onclick="doLogout()">🚪 Logout</button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="admin-main">
+    <div class="admin-top-bar">
+      <div class="top-title" id="topTitle">Select an Order</div>
+      <div class="top-actions">
+        <div class="icon-btn" onclick="toggleTheme()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="theme-icon-sun">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="theme-icon-moon" style="display:none">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="order-detail" id="orderDetail">
+      <div class="detail-placeholder">
+        <div>
+          <div class="detail-placeholder-icon">📦</div>
+          <p>No order selected</p>
+          <p style="font-size: 12px; margin-top: 8px; color: var(--text-muted);">Click on an order to view details</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = 'aura2025';
+let adminLoggedIn = false;
+let selectedOrderId = null;
+let currentFilter = 'all';
+let orders = [];
+let updateInterval = null;
+
+// ════════════════════════════════════════════
+//  THEME
+// ════════════════════════════════════════════
+function initTheme() {
+  const savedTheme = localStorage.getItem('aura_theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  updateThemeIcon(savedTheme);
+}
+
+function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+  const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('aura_theme', newTheme);
+  updateThemeIcon(newTheme);
+}
+
+function updateThemeIcon(theme) {
+  const sunIcon = document.querySelector('.theme-icon-sun');
+  const moonIcon = document.querySelector('.theme-icon-moon');
+  if (theme === 'dark') {
+    sunIcon.style.display = 'none';
+    moonIcon.style.display = 'block';
+  } else {
+    sunIcon.style.display = 'block';
+    moonIcon.style.display = 'none';
+  }
+}
+
+// ════════════════════════════════════════════
+//  AUTH
+// ════════════════════════════════════════════
+function doLogin() {
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value.trim();
+  if (u === ADMIN_USER && p === ADMIN_PASS) {
+    adminLoggedIn = true;
+    localStorage.setItem('aura_admin_logged_in', 'true');
+    document.getElementById('loginContainer').classList.remove('open');
+    loadOrders();
+    startAutoRefresh();
+  } else {
+    showToast('❌ Invalid credentials');
+    document.getElementById('loginPass').value = '';
+    document.getElementById('loginPass').focus();
+  }
+}
+
+function doLogout() {
+  if (!confirm('Logout from admin panel?')) return;
+  adminLoggedIn = false;
+  localStorage.removeItem('aura_admin_logged_in');
+  if (updateInterval) clearInterval(updateInterval);
+  document.getElementById('loginContainer').classList.add('open');
+  document.getElementById('ordersList').innerHTML = '';
+  document.getElementById('orderDetail').innerHTML = '<div class="detail-placeholder"><div><div class="detail-placeholder-icon">📦</div><p>No order selected</p></div></div>';
+  selectedOrderId = null;
+}
+
+// ════════════════════════════════════════════
+//  ORDERS
+// ════════════════════════════════════════════
+function loadOrders() {
+  try {
+    orders = JSON.parse(localStorage.getItem('aura_orders')) || [];
+  } catch {
+    orders = [];
+  }
+  renderOrdersList();
+  updateStats();
+}
+
+function renderOrdersList() {
+  const list = document.getElementById('ordersList');
+  let filtered = orders;
+
+  if (currentFilter === 'pending') filtered = orders.filter(o => o.status === 'pending');
+  else if (currentFilter === 'accepted') filtered = orders.filter(o => o.status === 'accepted');
+  else if (currentFilter === 'preparing') filtered = orders.filter(o => o.status === 'preparing');
+  else if (currentFilter === 'completed') filtered = orders.filter(o => o.status === 'completed');
+
+  list.innerHTML = filtered.map(order => {
+    const time = new Date(order.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return `
+      <div class="order-item ${order.status} ${selectedOrderId === order.id ? 'active' : ''}" onclick="selectOrder('${order.id}')">
+        <div class="order-status-badge ${order.status}">${order.status.toUpperCase()}</div>
+        <div class="order-id">#${order.id.split('-')[1].slice(-5)}</div>
+        <div class="order-table">🍽 Table ${order.tableNum}</div>
+        <div class="order-meta">
+          <div class="order-time">${time}</div>
+          <div class="order-amount">$${order.total.toFixed(2)}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Update counts
+  const all = orders.length;
+  const pending = orders.filter(o => o.status === 'pending').length;
+  const accepted = orders.filter(o => o.status === 'accepted').length;
+  const preparing = orders.filter(o => o.status === 'preparing').length;
+  const completed = orders.filter(o => o.status === 'completed').length;
+
+  document.getElementById('countAll').textContent = all;
+  document.getElementById('countPending').textContent = pending;
+  document.getElementById('countAccepted').textContent = accepted;
+  document.getElementById('countPreparing').textContent = preparing;
+  document.getElementById('countCompleted').textContent = completed;
+}
+
+function filterOrders(filter) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.closest('.filter-btn').classList.add('active');
+  renderOrdersList();
+}
+
+function selectOrder(orderId) {
+  selectedOrderId = orderId;
+  renderOrdersList();
+  renderOrderDetail();
+}
+
+function renderOrderDetail() {
+  if (!selectedOrderId) return;
+  const order = orders.find(o => o.id === selectedOrderId);
+  if (!order) return;
+
+  const timestamp = new Date(order.timestamp);
+  const timeStr = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const dateStr = timestamp.toLocaleDateString();
+
+  const itemsHtml = order.items.map(item => `
+    <div class="item-row">
+      <div class="item-info">
+        <div class="item-name">${item.qty}× ${item.name}</div>
+        ${item.note ? `<div class="item-note">📝 ${item.note}</div>` : ''}
+      </div>
+      <div class="item-qty-price">
+        <div class="item-qty">$${(item.price * item.qty).toFixed(2)}</div>
+      </div>
+    </div>
+  `).join('');
+
+  let actionButtons = '';
+  if (order.status === 'pending') {
+    actionButtons = `
+      <button class="action-btn primary" onclick="updateOrderStatus('${order.id}', 'accepted')">✅ Accept Order</button>
+      <button class="action-btn danger" onclick="updateOrderStatus('${order.id}', 'rejected')">🗑 Reject Order</button>
+    `;
+  } else if (order.status === 'accepted') {
+    actionButtons = `
+      <button class="action-btn secondary" onclick="updateOrderStatus('${order.id}', 'preparing')">👨‍🍳 Start Preparing</button>
+      <button class="action-btn danger" onclick="updateOrderStatus('${order.id}', 'rejected')">🗑 Cancel Order</button>
+    `;
+  } else if (order.status === 'preparing') {
+    actionButtons = `
+      <button class="action-btn warning" onclick="updateOrderStatus('${order.id}', 'completed')">📦 Mark Ready for Pickup</button>
+      <button class="action-btn danger" onclick="updateOrderStatus('${order.id}', 'rejected')" style="grid-column: auto">⏸ Cancel</button>
+    `;
+  } else if (order.status === 'completed') {
+    actionButtons = `
+      <button class="action-btn" style="background: var(--success); color: #fff; grid-column: 1/-1" disabled>✔️ Order Completed</button>
+    `;
+  }
+
+  document.getElementById('topTitle').textContent = `Order #${order.id.split('-')[1].slice(-5)}`;
+
+  document.getElementById('orderDetail').innerHTML = `
+    <div class="detail-header">
+      <div>
+        <div class="detail-title">Order #${order.id.split('-')[1].slice(-5)}</div>
+        <div class="detail-sub">${dateStr} • ${timeStr}</div>
+      </div>
+      <div class="detail-right">
+        <div class="detail-status ${order.status}">${order.status.toUpperCase()}</div>
+        <div class="detail-amount">$${order.total.toFixed(2)}</div>
+      </div>
+    </div>
+
+    <div class="detail-meta">
+      <div class="meta-item">
+        <div class="meta-label">Table Number</div>
+        <div class="meta-val">🍽 ${order.tableNum}</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Items Count</div>
+        <div class="meta-val">${order.items.length} items</div>
+      </div>
+    </div>
+
+    <div class="order-items">
+      <div class="items-title">📋 Order Items</div>
+      ${itemsHtml}
+    </div>
+
+    <div class="order-totals">
+      <div class="total-row">
+        <span>Subtotal</span>
+        <span>$${order.subtotal.toFixed(2)}</span>
+      </div>
+      <div class="total-row">
+        <span>Tax (10%)</span>
+        <span>$${order.tax.toFixed(2)}</span>
+      </div>
+      <div class="total-row">
+        <span>Total</span>
+        <span>$${order.total.toFixed(2)}</span>
+      </div>
+    </div>
+
+    <div class="detail-actions">
+      ${actionButtons}
+    </div>
+  `;
+}
+
+function updateOrderStatus(orderId, newStatus) {
+  const order = orders.find(o => o.id === orderId);
+  if (!order) return;
+
+  order.status = newStatus;
+  localStorage.setItem('aura_orders', JSON.stringify(orders));
+  renderOrdersList();
+  renderOrderDetail();
+  
+  const statusText = {
+    accepted: '✅ Order accepted!',
+    preparing: '👨‍🍳 Now preparing...',
+    completed: '📦 Ready for pickup!',
+    rejected: '❌ Order rejected'
+  };
+  
+  showToast(statusText[newStatus] || 'Status updated');
+}
+
+function updateStats() {
+  const pending = orders.filter(o => o.status === 'pending').length;
+  const preparing = orders.filter(o => o.status === 'preparing').length;
+  document.getElementById('statPending').textContent = pending;
+  document.getElementById('statPreparing').textContent = preparing;
+}
+
+// ════════════════════════════════════════════
+//  AUTO REFRESH
+// ════════════════════════════════════════════
+function startAutoRefresh() {
+  loadOrders();
+  updateInterval = setInterval(() => {
+    loadOrders();
+  }, 2000);
+}
+
+// ════════════════════════════════════════════
+//  TOAST
+// ════════════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+// ════════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  
+  if (localStorage.getItem('aura_admin_logged_in') === 'true') {
+    adminLoggedIn = true;
+    document.getElementById('loginContainer').classList.remove('open');
+    startAutoRefresh();
+  } else {
+    document.getElementById('loginContainer').classList.add('open');
+  }
+});
+</script>
+</body>
+</html>
