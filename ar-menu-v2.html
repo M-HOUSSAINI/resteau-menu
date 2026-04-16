@@ -1719,7 +1719,23 @@ const DISHES_DEFAULT = {
 function loadDishes() {
   try {
     const stored = localStorage.getItem('aura_dishes');
-    return stored ? JSON.parse(stored) : JSON.parse(JSON.stringify(DISHES_DEFAULT));
+    let dishes = {};
+    
+    // Always start with defaults
+    dishes = JSON.parse(JSON.stringify(DISHES_DEFAULT));
+    
+    // Merge in any custom items from localStorage (items with 'food_' prefix)
+    if (stored) {
+      const storedDishes = JSON.parse(stored);
+      Object.entries(storedDishes).forEach(([id, dish]) => {
+        // Only add if it's a custom item (food_xxxxx or not in defaults)
+        if (id.startsWith('food_') || !DISHES_DEFAULT[id]) {
+          dishes[id] = dish;
+        }
+      });
+    }
+    
+    return dishes;
   } catch (e) {
     console.error('Error loading dishes:', e);
     return JSON.parse(JSON.stringify(DISHES_DEFAULT));
@@ -2145,9 +2161,12 @@ function refreshMenuFromStorage() {
     Object.entries(newDishes).forEach(([id, d]) => {
       // Check if dish card already exists
       if (!document.getElementById('dcard-' + id)) {
-        // Only add if it has a valid category with a grid
-        if (document.getElementById('grid-' + d.category)) {
-          addCardToGrid(id, d);
+        // Only add custom items (food_ prefix) to avoid duplicating hardcoded items
+        if (id.startsWith('food_')) {
+          // Only add if it has a valid category with a grid
+          if (document.getElementById('grid-' + d.category)) {
+            addCardToGrid(id, d);
+          }
         }
       }
     });
@@ -2174,7 +2193,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Restore any custom dishes from localStorage into the DOM
   Object.entries(DISHES).forEach(([id, d]) => {
-    if (!document.getElementById('dcard-' + id) && !DISHES_DEFAULT[id]) {
+    // Only add custom items (those with food_ prefix) that don't already have a card
+    if (id.startsWith('food_') && !document.getElementById('dcard-' + id)) {
       addCardToGrid(id, d);
     }
   });
