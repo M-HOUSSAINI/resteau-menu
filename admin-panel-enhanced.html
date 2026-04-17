@@ -939,8 +939,8 @@
       </div>
 
       <div class="form-group">
-        <label class="form-label">Category</label>
-        <select class="form-select" id="foodCategory">
+        <label class="form-label">Category *</label>
+        <select class="form-select" id="foodCategory" required>
           <option value="">Select Category</option>
         </select>
       </div>
@@ -1234,12 +1234,29 @@ function saveFoodItem() {
     return;
   }
 
+  const category = document.getElementById('foodCategory').value.trim();
+  if (!category) {
+    showToast('❌ Please select a category');
+    return;
+  }
+
   const id = editingFoodId || ('food_' + Date.now());
   let uploadCount = 0;
   let totalUploads = 0;
 
   const imageFile = document.getElementById('foodImage').files[0];
   const modelFile = document.getElementById('food3dModel').files[0];
+
+  // Validate file sizes (max 5MB each)
+  const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+  if (imageFile && imageFile.size > MAX_FILE_SIZE) {
+    showToast('❌ Image file too large (max 5MB)');
+    return;
+  }
+  if (modelFile && modelFile.size > MAX_FILE_SIZE) {
+    showToast('❌ 3D model file too large (max 5MB)');
+    return;
+  }
 
   totalUploads = (imageFile ? 1 : 0) + (modelFile ? 1 : 0);
 
